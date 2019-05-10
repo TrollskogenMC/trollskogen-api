@@ -57,4 +57,16 @@ function createErrorMessage(res, next, code, message) {
 }
 
 const io = createIOClient(process.env.WEBSOCKET_URL);
-new DiscordBot().start(io);
+const bot = new DiscordBot().start(io);
+
+process.on("SIGTERM", () => {
+  server.close(() => {
+    bot.destroy();
+  });
+});
+
+process.on("SIGTERM", () => {
+  server.close(() => {
+    bot.destroy();
+  });
+});

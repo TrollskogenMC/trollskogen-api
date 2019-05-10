@@ -21,6 +21,10 @@ class DiscordBot {
     this.client.login(process.env.BOT_TOKEN);
   }
 
+  destroy() {
+    this.client.destroy();
+  }
+
   handleReady() {
     this.guild = this.client.guilds.get(TROLLSKOGEN_GUILD);
     this.admin = this.guild.members.find((member) => {
