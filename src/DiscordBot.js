@@ -63,8 +63,8 @@ class DiscordBot {
 
         const now = new Date();
         const diffMinutes =
-          (now.getTime() - new Date(user.verify_token_created).getTime()) *
-          1000 *
+          (now.getTime() - new Date(user.verify_token_created).getTime()) /
+          1000 /
           60;
         if (diffMinutes >= 15) {
           return message.channel.send(
@@ -79,9 +79,9 @@ class DiscordBot {
         result = await trx("users")
           .where({ verify_token: token })
           .update({
-            is_verified: false, // true
+            is_verified: true,
             verify_token_date: now,
-            //verify_token: null,
+            verify_token: null,
             discord_user_id: message.author.id
           });
       });
@@ -92,20 +92,22 @@ class DiscordBot {
     }
 
     if (result === 1) {
-      const hasSameName = message.author.username === user.last_seen_as;
       this.io.emit("verified", { userId: user.minecraft_uuid });
-      this.guild
-        .fetchMember(message.author)
-        .addRole(this.guild.roles.find("name", "Verifierad"));
+      const guildMember = await this.guild.fetchMember(message.author);
+
+      const discordName = guildMember.nickname
+        ? guildMember.nickname
+        : message.author.username;
+      const hasSameName = discordName === user.last_seen_as;
+
+      await guildMember.addRole(this.guild.roles.find("name", "Verifierad"));
       message.channel.send(
         `Tack ${
           message.author.username
         } för att du verifierade ditt konto! 😍\n\n**Belöning:**\n\`\`\`🏠 Ett extra hem på Minecraftservern.\n🔑 Verifierad roll på Discord.\n🎤 Möjligheten att delta i ljudkanaler.\`\`\``
       );
-
       if (!hasSameName) {
-        this.guild
-          .fetchMember(message.author)
+        guildMember
           .setNickname(user.last_seen_as)
           .then(console.log)
           .catch(console.error);
