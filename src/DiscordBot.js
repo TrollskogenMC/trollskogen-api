@@ -12,6 +12,7 @@ class DiscordBot {
     const client = new Discord.Client();
     client.on("ready", this.handleReady);
     client.on("message", this.handleMessage);
+    client.on("guildMemberRemove", this.handleGuildMemberRemove);
 
     this.client = client;
   }
@@ -23,6 +24,19 @@ class DiscordBot {
 
   destroy() {
     this.client.destroy();
+  }
+
+  async handleGuildMemberRemove(member) {
+    const result = await knex()
+      .table("users")
+      .where({ discord_user_id: member.id });
+    let user;
+    if (result.length === 1) {
+      [user] = result;
+    } else {
+      console.error("Failed to get single user by discord id: " + member.id);
+      return;
+    }
   }
 
   handleReady() {
