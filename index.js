@@ -1,15 +1,10 @@
 require("dotenv").config();
-const { createServer, plugins } = require("restify");
 const DiscordBot = require("./src/DiscordBot");
 const knex = require("./src/knex");
 const createVerifyToken = require("./src/createVerifyToken");
 const server = require("./src/server");
-const errors = require("restify-errors");
 const createIOClient = require("./src/createIOClient");
-
-server.use(plugins.acceptParser(server.acceptable));
-server.use(plugins.queryParser());
-server.use(plugins.bodyParser());
+const wrapHandler = require("./src/wrapHandler");
 
 server.get("/create-token", async (req, res, next) => {
   if (!req.query.userId) {
@@ -29,6 +24,22 @@ server.get("/create-token", async (req, res, next) => {
   res.send({ token });
   next();
 });
+
+const racesEndpoint = require("./src/routeHandlers/races/race");
+
+server.post("/races/race", wrapHandler(racesEndpoint.create));
+server.post("/races/race/addStart", wrapHandler(racesEndpoint.addStartPoint));
+server.del("/races/race/start", wrapHandler(racesEndpoint.deleteStartPoint));
+server.del("/races/race", wrapHandler(racesEndpoint.delete));
+server.put("/races/race", wrapHandler(racesEndpoint.update));
+
+const createCheckpoint = require("./src/routeHandlers/createCheckpoint/createCheckpoint");
+server.post("/race/point", wrapHandler(createCheckpoint));
+
+const deleteCheckpoint = require("./src/routeHandlers/deleteCheckpoint/deleteCheckpoint");
+server.del("/race/point", wrapHandler(deleteCheckpoint));
+
+server.get("/races", wrapHandler(require("./src/routeHandlers/getRaces")));
 
 server.get("/users", async (req, res, next) => {
   let users;

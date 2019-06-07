@@ -1,0 +1,19 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "http://api.trollskogen.nu/deleteCheckpoint.schema.json",
+  "type": "object",
+  "required": [
+    "race_id",
+    "race_point"
+  ],
+  "properties": {
+    "race_id": {
+      "type": "integer",
+      "minimum": 1
+    },
+    "race_point": {
+      "type": "integer",
+      "minimum": 1
+    }
+  }
+}

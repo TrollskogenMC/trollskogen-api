@@ -1,0 +1,48 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "http://api.trollskogen.nu/addCheckpoint.schema.json",
+  "type": "object",
+  "required": [
+    "race_id",
+    "position",
+    "location_x",
+    "location_y",
+    "location_z",
+    "location_pitch",
+    "location_yaw",
+    "location_world",
+    "radius"
+  ],
+  "properties": {
+    "race_id": {
+      "type": "integer"
+    },
+    "position": {
+      "type": "integer",
+      "minimum": 1
+    },
+    "location_x": {
+      "type": "integer"
+    },
+    "location_y": {
+      "type": "integer"
+    },
+    "location_z": {
+      "type": "integer"
+    },
+    "location_pitch": {
+      "type": "number"
+    },
+    "location_yaw": {
+      "type": "number"
+    },
+    "location_world": {
+      "type": "string",
+      "minLength": 1
+    },
+    "radius": {
+      "type": "integer",
+      "minimum": 1
+    }
+  }
+}
