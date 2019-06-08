@@ -128,7 +128,8 @@ module.exports = {
       spawn_world,
       name,
       is_editing,
-      is_enabled
+      is_enabled,
+      type
     } = req.body;
 
     return knex("races")
@@ -142,7 +143,8 @@ module.exports = {
         spawn_world,
         name,
         is_enabled,
-        is_editing
+        is_editing,
+        type
       });
   },
   create: async (req, res) => {

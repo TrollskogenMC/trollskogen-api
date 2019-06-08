@@ -13,8 +13,10 @@
     "spawn_pitch",
     "spawn_yaw",
     "is_enabled",
-    "is_editing"
+    "is_editing",
+    "type"
   ],
+  "additionalProperties": false,
   "properties": {
     "id": {
       "type": "integer",
@@ -49,6 +51,15 @@
     },
     "is_editing": {
       "type": "boolean"
+    },
+    "type": {
+      "type": "string",
+      "enum": [
+        "player",
+        "horse",
+        "elytra",
+        "pig"
+      ]
     }
   }
 }
