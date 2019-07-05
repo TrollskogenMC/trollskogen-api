@@ -6,17 +6,17 @@ const server = createServer({
   version: "1.0.0"
 });
 
-server.use(plugins.acceptParser(server.acceptable));
-server.use(plugins.queryParser());
-server.use(plugins.bodyParser());
-
 const cors = corsMiddleware({
   preflightMaxAge: 5,
-  origins: ['https://*.netlify.com']
+  origins: ['*']
 })
  
 server.pre(cors.preflight);
 server.use(cors.actual);
+
+server.use(plugins.acceptParser(server.acceptable));
+server.use(plugins.queryParser());
+server.use(plugins.bodyParser());
 
 server.use((req, res, next) => {
   console.log(req.url, req.body);
