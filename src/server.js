@@ -8,7 +8,7 @@ const server = createServer({
 
 const cors = corsMiddleware({
   preflightMaxAge: 5,
-  origins: ['*']
+  origins: ['https://*.netlify.com']
 })
  
 server.pre(cors.preflight);
