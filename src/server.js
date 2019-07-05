@@ -12,7 +12,7 @@ server.use(plugins.bodyParser());
 
 const cors = corsMiddleware({
   preflightMaxAge: 5,
-  origins: ['http://netlify.com']
+  origins: ['https://*.netlify.com']
 })
  
 server.pre(cors.preflight);
