@@ -14,13 +14,17 @@ const cors = corsMiddleware({
 server.pre(cors.preflight);
 server.use(cors.actual);
 
-if (process.env.NODE_ENV === "production") {
-  server.use((req, res, next) => {
-    if (req.header("x-forwarded-proto") !== "https")
-      res.redirect(`https://${req.header("host")}${req.url}`);
-    else next();
-  });
-}
+server.use((req, res, next) => {
+  if (["production"].indexOf(process.env.NODE_ENV) >= 0) {
+    if (req.headers["x-forwarded-proto"] != "https") {
+      res.redirect(302, "https://" + req.hostname + req.originalUrl);
+    } else {
+      next();
+    }
+  } else {
+    next();
+  }
+});
 
 server.use(plugins.acceptParser(server.acceptable));
 server.use(plugins.queryParser());
