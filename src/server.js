@@ -14,21 +14,17 @@ const cors = corsMiddleware({
 server.pre(cors.preflight);
 server.use(cors.actual);
 
-server.use((req, res, next) => {
+server.pre((req, res, next) => {
   if (req.headers["x-forwarded-proto"] != "https") {
-    res.redirect(302, "https://" + req.hostname + req.originalUrl, next);
+    res.redirect(302, "https://" + server.url + req.url, next);
   } else {
     next();
   }
+  return next();
 });
 
 server.use(plugins.acceptParser(server.acceptable));
 server.use(plugins.queryParser());
 server.use(plugins.bodyParser());
-
-server.use((req, res, next) => {
-  console.log(req.url, req.body);
-  next();
-});
 
 module.exports = server;
