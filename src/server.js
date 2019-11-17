@@ -16,7 +16,11 @@ server.use(cors.actual);
 
 server.pre((req, res, next) => {
   if (req.headers["x-forwarded-proto"] != "https") {
-    res.redirect(302, "https://" + server.url + req.url, next);
+    res.redirect(
+      302,
+      "https://" + req.headers["x-forwarded-host"] + req.url,
+      next
+    );
   } else {
     next();
   }
