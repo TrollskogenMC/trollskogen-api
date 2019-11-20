@@ -15,12 +15,15 @@ server.pre(cors.preflight);
 server.use(cors.actual);
 
 server.pre((req, res, next) => {
-  if (req.headers["x-forwarded-proto"] != "https") {
-    res.redirect(302, "https://" + process.env.HOST + req.url, next);
+  if (process.env.NODE_ENV === "production") {
+    if (req.headers["x-forwarded-proto"] != "https") {
+      res.redirect(302, "https://" + process.env.HOST + req.url, next);
+    } else {
+      next();
+    }
   } else {
     next();
   }
-  return next();
 });
 
 server.use(plugins.acceptParser(server.acceptable));

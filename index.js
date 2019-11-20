@@ -54,6 +54,31 @@ server.get("/users", async (req, res, next) => {
   next();
 });
 
+server.get("/bans", async (req, res, next) => {
+  let bans;
+  try {
+    bans = await knex
+      .select([
+        "bans.id as ban_id",
+        "bans.when as ban_date",
+        "bans.reason as ban_reason",
+        "bans.duration as duration_in_seconds",
+        "banned_user.id as banned_user_id",
+        "banned_user.last_seen_as as banned_user_name",
+        "issued_user.id as issued_user_id",
+        "issued_user.last_seen_as as issued_user_name"
+      ])
+      .table("bans")
+      .innerJoin("users as banned_user", "banned_user.id", "bans.user_id")
+      .innerJoin("users as issued_user", "issued_user.id", "bans.issued_by");
+  } catch (e) {
+    return createErrorMessage(res, next, 500, e);
+  }
+
+  res.json(bans);
+  next();
+});
+
 server.listen(process.env.PORT, function() {
   console.log("%s listening at %s", server.name, server.url);
 });
