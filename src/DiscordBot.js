@@ -68,14 +68,12 @@ export default class DiscordBot {
     try {
       user = await db.findUserByTokenOrDiscordId({ token, discordUserId, trx });
       if (user && user.is_verified) {
-        message.channel.send("👍 Jag har redan verifierat dig!");
+        replyAlreadyVerified(message);
         return;
       }
 
       if (!user) {
-        message.channel.send(
-          "🤔 Jag känner inte igen koden. Säker på att du skrev rätt?"
-        );
+        replyInvalidToken(message);
         return;
       }
 
@@ -85,13 +83,7 @@ export default class DiscordBot {
         1000 /
         60;
       if (diffMinutes >= 15) {
-        message.channel.send(
-          "⌛ Din kod har gått ut. Skriv `/verify` på Minecraftservern för att generera en ny kod."
-        );
-        return;
-      }
-      if (user.is_verified) {
-        message.channel.send("👍 Jag har redan verifierat dig!");
+        replyExpiredToken(message);
         return;
       }
 
@@ -103,7 +95,7 @@ export default class DiscordBot {
       });
       trx.commit();
     } catch (e) {
-      message.channel.send("Ett oväntat fel inträffade. Admin har meddelats.");
+      replyVerifyError(message);
       this.admin.send(e.message);
       trx.rollback();
       console.error(e);
@@ -111,28 +103,56 @@ export default class DiscordBot {
 
     if (modifiedRows === 1) {
       this.io.emit("verified", { userId: user.minecraft_uuid });
+      replyVerifiedSuccessfully(message);
       const guildMember = await this.guild.fetchMember(message.author);
 
       const discordName = guildMember.nickname
         ? guildMember.nickname
         : message.author.username;
       const hasSameName = discordName === user.last_seen_as;
-
       await guildMember.addRole(this.guild.roles.find("name", "Verifierad"));
-      message.channel.send(
-        `Tack ${
-          message.author.username
-        } för att du verifierade ditt konto! 😍\n\n**Belöning:**\n\`\`\`🏠 Ett extra hem på Minecraftservern.\n🔑 Verifierad roll på Discord.\n🎤 Möjligheten att delta i ljudkanaler.\`\`\``
-      );
+
       if (!hasSameName) {
         guildMember
           .setNickname(user.last_seen_as)
           .then(console.log)
           .catch(console.error);
-        message.channel.send(
-          "Jag bytte också ut ditt namn här på Discord till det du spelar med på Minecraft ✔️"
-        );
+        replyNicknameChange(message);
       }
     }
   }
+}
+
+function replyAlreadyVerified(message) {
+  message.channel.send("👍 Jag har redan verifierat dig!");
+}
+
+function replyInvalidToken(message) {
+  message.channel.send(
+    "🤔 Jag känner inte igen koden. Säker på att du skrev rätt?"
+  );
+}
+
+function replyExpiredToken(message) {
+  message.channel.send(
+    "⌛ Din kod har gått ut. Skriv `/verify` på Minecraftservern för att generera en ny kod."
+  );
+}
+
+function replyVerifyError(message) {
+  message.channel.send("Ett oväntat fel inträffade. Admin har meddelats.");
+}
+
+function replyVerifiedSuccessfully(message) {
+  message.channel.send(
+    `Tack ${
+      message.author.username
+    } för att du verifierade ditt konto! 😍\n\n**Belöning:**\n\`\`\`🏠 Ett extra hem på Minecraftservern.\n🔑 Verifierad roll på Discord.\n🎤 Möjligheten att delta i ljudkanaler.\`\`\``
+  );
+}
+
+function replyNicknameChange(message) {
+  message.channel.send(
+    "Jag bytte också ut ditt namn här på Discord till det du spelar med på Minecraft ✔️"
+  );
 }

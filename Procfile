@@ -1,1 +1,1 @@
-web: node --require dotenv/config --experimental-modules index.js
+web: node --require dotenv/config --experimental-modules src/index.js
