@@ -13,7 +13,7 @@ const cors = corsMiddleware({
 
 const app = restify.createServer();
 app.pre(cors.preflight);
-app.pre(forceSSL);
+// app.pre(forceSSL);
 app.use(cors.actual);
 app.use(restify.plugins.acceptParser(app.acceptable));
 app.use(restify.plugins.queryParser());
