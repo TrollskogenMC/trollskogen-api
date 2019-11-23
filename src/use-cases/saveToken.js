@@ -1,5 +1,7 @@
 import crypto from "crypto";
 
+const a = 123;
+
 export default function makeSaveToken({ db }) {
   return async function({ minecraftUserId, lastSeenAs }) {
     if (!minecraftUserId) {

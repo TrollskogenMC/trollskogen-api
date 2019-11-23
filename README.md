@@ -1,0 +1,1 @@
+![CircleCI](https://img.shields.io/circleci/build/github/hornta/trollskogen-api)
