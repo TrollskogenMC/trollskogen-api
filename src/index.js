@@ -3,7 +3,7 @@ import restify from "restify";
 import { getBans, getUsers, getToken } from "./controllers/index.js";
 import DiscordBot from "./discordBot.js";
 import createIOClient from "./createIoClient.js";
-// import forceSSL from "./forceSsl.js";
+import forceSSL from "./forceSsl.js";
 import makeCallback from "./expressCallback.js";
 
 const cors = corsMiddleware({
@@ -12,8 +12,8 @@ const cors = corsMiddleware({
 });
 
 const app = restify.createServer();
+app.pre(forceSSL);
 app.pre(cors.preflight);
-// app.pre(forceSSL);
 app.use(cors.actual);
 app.use(restify.plugins.acceptParser(app.acceptable));
 app.use(restify.plugins.queryParser());
