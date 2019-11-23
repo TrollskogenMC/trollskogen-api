@@ -1,10 +1,9 @@
-const Discord = require("discord.js");
-const createVerifyToken = require("./createVerifyToken");
-const knex = require("./knex");
+import Discord from "discord.js";
+import db, { makeDb } from "./data-access/index.js";
 
 const TROLLSKOGEN_GUILD = "540217517164068922";
 
-class DiscordBot {
+export default class DiscordBot {
   constructor() {
     this.handleReady = this.handleReady.bind(this);
     this.handleMessage = this.handleMessage.bind(this);
@@ -12,7 +11,7 @@ class DiscordBot {
     const client = new Discord.Client();
     client.on("ready", this.handleReady);
     client.on("message", this.handleMessage);
-    client.on("guildMemberRemove", this.handleGuildMemberRemove);
+    // client.on("guildMemberRemove", this.handleGuildMemberRemove);
 
     this.client = client;
   }
@@ -26,24 +25,25 @@ class DiscordBot {
     this.client.destroy();
   }
 
-  async handleGuildMemberRemove(member) {
-    const result = await knex()
-      .table("users")
-      .where({ discord_user_id: member.id });
-    let user;
-    if (result.length === 1) {
-      [user] = result;
-    } else {
-      console.error("Failed to get single user by discord id: " + member.id);
-      return;
-    }
-  }
+  // async handleGuildMemberRemove(member) {
+  //   const result = await knex()
+  //     .table("users")
+  //     .where({ discord_user_id: member.id });
+  //   let user;
+  //   if (result.length === 1) {
+  //     [user] = result;
+  //   } else {
+  //     console.error(`Failed to get single user by discord id: ${  member.id}`);
+  //     return;
+  //   }
+  // }
 
   handleReady() {
     this.guild = this.client.guilds.get(TROLLSKOGEN_GUILD);
-    this.admin = this.guild.members.find((member) => {
-      return (member.user.id = process.env.ADMIN_DISCORD_ID);
-    });
+
+    this.admin = this.guild.members.find(
+      (member) => (member.user.id = process.env.ADMIN_DISCORD_ID)
+    );
   }
 
   async handleMessage(message) {
@@ -58,54 +58,58 @@ class DiscordBot {
       return;
     }
 
-    let result;
+    const discordUserId = message.author.id;
     let user;
     const token = content.substr(-6);
+    const database = makeDb();
+    const trxProvider = database.transactionProvider();
+    const trx = await trxProvider();
+    let modifiedRows;
     try {
-      await knex.transaction(async (trx) => {
-        const users = await trx
-          .select()
-          .from("users")
-          .where({ verify_token: token });
-        if (users.length === 0) {
-          return message.channel.send(
-            "🤔 Jag känner inte igen koden. Säker på att du skrev rätt?"
-          );
-        }
+      user = await db.findUserByTokenOrDiscordId({ token, discordUserId, trx });
+      if (user && user.is_verified) {
+        message.channel.send("👍 Jag har redan verifierat dig!");
+        return;
+      }
 
-        [user] = users;
+      if (!user) {
+        message.channel.send(
+          "🤔 Jag känner inte igen koden. Säker på att du skrev rätt?"
+        );
+        return;
+      }
 
-        const now = new Date();
-        const diffMinutes =
-          (now.getTime() - new Date(user.verify_token_created).getTime()) /
-          1000 /
-          60;
-        if (diffMinutes >= 15) {
-          return message.channel.send(
-            "⌛ Din kod har gått ut. Skriv `/verify` på Minecraftservern för att prova igen."
-          );
-        }
+      const now = new Date();
+      const diffMinutes =
+        (now.getTime() - new Date(user.verify_token_created).getTime()) /
+        1000 /
+        60;
+      if (diffMinutes >= 15) {
+        message.channel.send(
+          "⌛ Din kod har gått ut. Skriv `/verify` på Minecraftservern för att generera en ny kod."
+        );
+        return;
+      }
+      if (user.is_verified) {
+        message.channel.send("👍 Jag har redan verifierat dig!");
+        return;
+      }
 
-        if (user.is_verified) {
-          return message.channel.send("👍 Jag har redan verifierat dig!");
-        }
-
-        result = await trx("users")
-          .where({ verify_token: token })
-          .update({
-            is_verified: true,
-            verify_token_date: now,
-            verify_token: null,
-            discord_user_id: message.author.id
-          });
+      modifiedRows = await db.updateVerifiedUser({
+        token,
+        date: now,
+        discordUserId,
+        trx
       });
+      trx.commit();
     } catch (e) {
       message.channel.send("Ett oväntat fel inträffade. Admin har meddelats.");
       this.admin.send(e.message);
+      trx.rollback();
       console.error(e);
     }
 
-    if (result === 1) {
+    if (modifiedRows === 1) {
       this.io.emit("verified", { userId: user.minecraft_uuid });
       const guildMember = await this.guild.fetchMember(message.author);
 
@@ -126,12 +130,9 @@ class DiscordBot {
           .then(console.log)
           .catch(console.error);
         message.channel.send(
-          "Jag bytte också ut ditt namn här på Discord till det du spelar med på Minecraft. ✔️"
+          "Jag bytte också ut ditt namn här på Discord till det du spelar med på Minecraft ✔️"
         );
       }
     }
-    console.log(result);
   }
 }
-
-module.exports = DiscordBot;
