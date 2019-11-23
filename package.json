@@ -42,6 +42,6 @@
     "eslint-plugin-import": "^2.18.2",
     "eslint-plugin-prettier": "^3.0.1",
     "nodemon": "^2.0.1",
-    "prettier": "^1.17.0"
+    "prettier": "^1.19.1"
   }
 }
