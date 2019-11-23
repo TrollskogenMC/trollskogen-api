@@ -20,8 +20,8 @@ jobs:
             - node_modules
           key: v1-dependencies-{{ checksum "package.json" }}
       - run:
-        name: eslint
-        command: "npx eslint . --quiet"
+          name: eslint
+          command: "npx eslint . --quiet"
   deploy:
     docker:
       - image: buildpack-deps:trusty
