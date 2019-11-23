@@ -146,9 +146,7 @@ function replyVerifyError(message) {
 
 function replyVerifiedSuccessfully(message) {
   message.channel.send(
-    `Tack ${
-      message.author.username
-    } för att du verifierade ditt konto! 😍\n\n**Belöning:**\n\`\`\`🏠 Ett extra hem på Minecraftservern.\n🔑 Verifierad roll på Discord.\n🎤 Möjligheten att delta i ljudkanaler.\`\`\``
+    `Tack ${message.author.username} för att du verifierade ditt konto! 😍\n\n**Belöning:**\n\`\`\`🏠 Ett extra hem på Minecraftservern.\n🔑 Verifierad roll på Discord.\n🎤 Möjligheten att delta i ljudkanaler.\`\`\``
   );
 }
 
