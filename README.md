@@ -1,1 +1,1 @@
-![CircleCI](https://img.shields.io/circleci/build/github/hornta/trollskogen-api)
+[![CircleCI](https://img.shields.io/circleci/build/github/hornta/trollskogen-api)](https://circleci.com/gh/hornta/trollskogen-api)
