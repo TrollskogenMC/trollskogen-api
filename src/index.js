@@ -3,7 +3,7 @@ import restify from "restify";
 import { getBans, getUsers, getToken } from "./controllers/index.js";
 import DiscordBot from "./discordBot.js";
 import createIOClient from "./createIoClient.js";
-import forceSSL from "./forceSsl.js";
+// import forceSSL from "./forceSsl.js";
 import makeCallback from "./expressCallback.js";
 
 const cors = corsMiddleware({
