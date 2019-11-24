@@ -23,16 +23,16 @@
     "migrate_prod": "cross-env NODE_ENV=production knex migrate:latest"
   },
   "dependencies": {
-    "discord.js": "^11.4.2",
+    "discord.js": "^11.5.1",
     "dotenv": "^8.2.0",
     "knex": "^0.20.2",
     "pg": "^7.14.0",
     "restify": "^8.4.0",
     "restify-cors-middleware": "^1.1.1",
     "restify-errors": "^8.0.1",
-    "socket.io": "^2.2.0",
-    "socket.io-client": "^2.2.0",
-    "uuid": "^3.3.2"
+    "socket.io": "^2.3.0",
+    "socket.io-client": "^2.3.0",
+    "uuid": "^3.3.3"
   },
   "devDependencies": {
     "babel-eslint": "^10.0.1",
@@ -40,8 +40,8 @@
     "eslint": "^6.7.0",
     "eslint-config-prettier": "^6.7.0",
     "eslint-plugin-import": "^2.18.2",
-    "eslint-plugin-prettier": "^3.0.1",
+    "eslint-plugin-prettier": "^3.1.1",
     "nodemon": "^2.0.1",
-    "prettier": "^1.17.0"
+    "prettier": "^1.19.1"
   }
 }
