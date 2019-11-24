@@ -17,7 +17,6 @@ export default function makeSaveToken({ db }) {
       lastSeenAs
     });
 
-    console.log(modifiedRows);
     if (modifiedRows === 0) {
       return null;
     }

@@ -3,6 +3,7 @@ import util from "util";
 export default function makeServerDb({ makeDb }) {
   return Object.freeze({
     findAllBans,
+    findActiveBans,
     findAllUsers,
     findUserByTokenOrDiscordId,
     updateVerifiedUser,
@@ -25,6 +26,25 @@ export default function makeServerDb({ makeDb }) {
       .table("bans")
       .innerJoin("users as banned_user", "banned_user.id", "bans.user_id")
       .innerJoin("users as issued_user", "issued_user.id", "bans.issued_by");
+  }
+
+  async function findActiveBans() {
+    const db = makeDb();
+    return db
+      .select([
+        "bans.id as ban_id",
+        "bans.issued_date as issued_date",
+        "bans.reason as ban_reason",
+        "bans.expiry_date as expiry_date",
+        "banned_user.id as banned_user_id",
+        "banned_user.last_seen_as as banned_user_name",
+        "issued_user.id as issued_user_id",
+        "issued_user.last_seen_as as issued_user_name"
+      ])
+      .table("bans")
+      .innerJoin("users as banned_user", "banned_user.id", "bans.user_id")
+      .innerJoin("users as issued_user", "issued_user.id", "bans.issued_by")
+      .whereRaw("bans.expiry_date is null or bans.expiry_date >= now()");
   }
 
   async function findAllUsers() {

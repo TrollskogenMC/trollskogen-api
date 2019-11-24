@@ -1,6 +1,11 @@
 import corsMiddleware from "restify-cors-middleware";
 import restify from "restify";
-import { getBans, getUsers, getToken } from "./controllers/index.js";
+import {
+  getBans,
+  getUsers,
+  getToken,
+  getActiveBans
+} from "./controllers/index.js";
 import DiscordBot from "./discordBot.js";
 import createIOClient from "./createIoClient.js";
 import forceSSL from "./forceSsl.js";
@@ -19,6 +24,7 @@ app.use(restify.plugins.acceptParser(app.acceptable));
 app.use(restify.plugins.queryParser());
 app.use(restify.plugins.bodyParser());
 app.get("/bans", makeCallback(getBans));
+app.get("/bans/active", makeCallback(getActiveBans));
 app.get("/users", makeCallback(getUsers));
 app.get("/create-token", makeCallback(getToken));
 
