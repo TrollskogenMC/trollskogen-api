@@ -1,10 +1,13 @@
-export default function makeGetActiveBans({ listBans }) {
-  return async function() {
+export default function makeGetBan({ retrieveBan }) {
+  return async function(httpRequest) {
     try {
-      const bans = await listBans({ active: true });
+      const ban = await retrieveBan({ id: httpRequest.params.id });
+      if (!ban) {
+        return { statusCode: 404 };
+      }
       return {
         statusCode: 200,
-        body: { bans }
+        body: { ban }
       };
     } catch (e) {
       console.log(e);

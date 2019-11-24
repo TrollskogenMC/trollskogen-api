@@ -4,7 +4,10 @@ import {
   getBans,
   getUsers,
   getToken,
-  getActiveBans
+  getActiveBans,
+  getHomes,
+  postBan,
+  getBan
 } from "./controllers/index.js";
 import DiscordBot from "./discordBot.js";
 import createIOClient from "./createIoClient.js";
@@ -27,6 +30,9 @@ app.get("/bans", makeCallback(getBans));
 app.get("/bans/active", makeCallback(getActiveBans));
 app.get("/users", makeCallback(getUsers));
 app.get("/create-token", makeCallback(getToken));
+app.get("/homes", makeCallback(getHomes));
+app.post("/ban", makeCallback(postBan));
+app.get("/ban/:id(^[0-9]+$)", makeCallback(getBan));
 
 // const racesEndpoint = require("./routeHandlers/races/race");
 

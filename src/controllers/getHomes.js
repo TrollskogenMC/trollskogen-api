@@ -1,10 +1,10 @@
-export default function makeGetActiveBans({ listBans }) {
+export default function makeGetHomes({ listHomes }) {
   return async function() {
     try {
-      const bans = await listBans({ active: true });
+      const homes = await listHomes();
       return {
         statusCode: 200,
-        body: { bans }
+        body: { homes }
       };
     } catch (e) {
       console.log(e);

@@ -18,7 +18,7 @@
     "url": "https://github.com/hornta/hiahia-discord"
   },
   "scripts": {
-    "start": "nodemon --require dotenv/config --experimental-modules --inspect-brk src/index.js",
+    "start": "nodemon --require dotenv/config --experimental-modules src/index.js",
     "start_prod": "cross-env NODE_ENV=production node --require dotenv/config --experimental-modules src/index.js",
     "migrate_prod": "cross-env NODE_ENV=production knex migrate:latest"
   },

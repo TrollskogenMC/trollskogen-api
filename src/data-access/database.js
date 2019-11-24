@@ -6,8 +6,12 @@ export default function makeServerDb({ makeDb }) {
     findActiveBans,
     findAllUsers,
     findUserByTokenOrDiscordId,
+    findUserByMinecraftId,
     updateVerifiedUser,
-    createOrUpdateUserWithToken
+    createOrUpdateUserWithToken,
+    findAllHomes,
+    insertBan,
+    findBanById
   });
 
   async function findAllBans() {
@@ -21,11 +25,18 @@ export default function makeServerDb({ makeDb }) {
         "banned_user.id as banned_user_id",
         "banned_user.last_seen_as as banned_user_name",
         "issued_user.id as issued_user_id",
-        "issued_user.last_seen_as as issued_user_name"
+        "issued_user.last_seen_as as issued_user_name",
+        "cancelled_user.id as cancelled_user_id",
+        "cancelled_user.last_seen_as as cancelled_user_name"
       ])
       .table("bans")
       .innerJoin("users as banned_user", "banned_user.id", "bans.user_id")
-      .innerJoin("users as issued_user", "issued_user.id", "bans.issued_by");
+      .innerJoin("users as issued_user", "issued_user.id", "bans.issued_by")
+      .leftJoin(
+        "users as cancelled_user",
+        "cancelled_user.id",
+        "bans.cancelled_by"
+      );
   }
 
   async function findActiveBans() {
@@ -39,11 +50,18 @@ export default function makeServerDb({ makeDb }) {
         "banned_user.id as banned_user_id",
         "banned_user.last_seen_as as banned_user_name",
         "issued_user.id as issued_user_id",
-        "issued_user.last_seen_as as issued_user_name"
+        "issued_user.last_seen_as as issued_user_name",
+        "cancelled_user.id as cancelled_user_id",
+        "cancelled_user.last_seen_as as cancelled_user_name"
       ])
       .table("bans")
       .innerJoin("users as banned_user", "banned_user.id", "bans.user_id")
       .innerJoin("users as issued_user", "issued_user.id", "bans.issued_by")
+      .innerJoin(
+        "users as cancelled_user",
+        "cancelled_user.id",
+        "bans.cancelled_by"
+      )
       .whereRaw("bans.expiry_date is null or bans.expiry_date >= now()");
   }
 
@@ -123,5 +141,39 @@ export default function makeServerDb({ makeDb }) {
     );
     const result = await db.raw(query);
     return result.rowCount;
+  }
+
+  async function findAllHomes() {
+    const db = makeDb();
+    const result = await db.raw(`
+      SELECT * FROM homes
+    `);
+    return result.rows;
+  }
+
+  async function insertBan(banInfo) {
+    const db = makeDb();
+    const [id] = await db("bans")
+      .returning("id")
+      .insert(banInfo);
+    return id;
+  }
+
+  async function findUserByMinecraftId({ minecraftId }) {
+    const db = makeDb();
+    const [user] = await db
+      .select()
+      .from("users")
+      .where({ minecraft_uuid: minecraftId });
+    return user;
+  }
+
+  async function findBanById({ id }) {
+    const db = makeDb();
+    const [ban] = await db
+      .select()
+      .from("bans")
+      .where({ id });
+    return ban;
   }
 }
