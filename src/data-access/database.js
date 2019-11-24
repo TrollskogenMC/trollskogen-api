@@ -49,7 +49,16 @@ export default function makeServerDb({ makeDb }) {
 
   async function findAllUsers() {
     const db = makeDb();
-    return db.select().table("users");
+    const result = await db.raw(`
+      SELECT u.*,
+       bool_or(b.id IS NOT NULL
+               AND (b.expiry_date IS NULL
+                    OR b.expiry_date < now())) AS is_banned
+      FROM users u
+      FULL JOIN bans b ON u.id = b.user_id
+      GROUP BY u.id
+    `);
+    return result.rows;
   }
 
   async function findUserByTokenOrDiscordId({ token, discordUserId, trx }) {
