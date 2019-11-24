@@ -14,6 +14,10 @@ import createIOClient from "./createIoClient.js";
 import forceSSL from "./forceSsl.js";
 import makeCallback from "./expressCallback.js";
 
+if (!process.env.API_KEY) {
+  throw new Error("Application requires API_KEY to be set.");
+}
+
 const cors = corsMiddleware({
   preflightMaxAge: 5,
   origins: ["https://*.netlify.com", "https://trollskogen.nu"]

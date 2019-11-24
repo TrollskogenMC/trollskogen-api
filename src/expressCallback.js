@@ -10,7 +10,8 @@ export default function makeExpressCallback(controller) {
       headers: {
         "Content-Type": req.header("Content-Type"),
         Referer: req.header("referer"),
-        "User-Agent": req.header("User-Agent")
+        "User-Agent": req.header("User-Agent"),
+        "API-key": req.header("API-key")
       }
     };
     controller(httpRequest)
