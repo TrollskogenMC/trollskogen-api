@@ -7,3 +7,4 @@ Available routes:
 * GET /bans/active - List active bans
 * POST /ban - Add a new ban
 * GET /ban/:id - Retrieve a single ban
+* GET /user/:id - Retrieve a single user

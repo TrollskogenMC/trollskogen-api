@@ -7,7 +7,8 @@ import {
   getActiveBans,
   getHomes,
   postBan,
-  getBan
+  getBan,
+  getUser
 } from "./controllers/index.js";
 import DiscordBot from "./discordBot.js";
 import createIOClient from "./createIoClient.js";
@@ -37,6 +38,7 @@ app.get("/create-token", makeCallback(getToken));
 app.get("/homes", makeCallback(getHomes));
 app.post("/ban", makeCallback(postBan));
 app.get("/ban/:id(^[0-9]+$)", makeCallback(getBan));
+app.get("/user/:id(^[0-9]+$)", makeCallback(getUser));
 
 // const racesEndpoint = require("./routeHandlers/races/race");
 

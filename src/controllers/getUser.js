@@ -1,11 +1,13 @@
-/* eslint-disable */
-export default function makeGetBans({ listBans }) {
-  return async function() {
+export default function makeGetUser({ retrieveUser }) {
+  return async function(httpRequest) {
     try {
-      const bans = await listBans();
+      const user = await retrieveUser({ id: httpRequest.params.id });
+      if (!user) {
+        return { statusCode: 404 };
+      }
       return {
         statusCode: 200,
-        body: { bans }
+        body: { user }
       };
     } catch (e) {
       console.log(e);
@@ -21,4 +23,3 @@ export default function makeGetBans({ listBans }) {
     }
   };
 }
-/* eslint-enable */

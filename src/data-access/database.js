@@ -11,7 +11,9 @@ export default function makeServerDb({ makeDb }) {
     createOrUpdateUserWithToken,
     findAllHomes,
     insertBan,
-    findBanById
+    findBanById,
+    findUserById,
+    findBansByUserId
   });
 
   async function findAllBans() {
@@ -175,5 +177,23 @@ export default function makeServerDb({ makeDb }) {
       .from("bans")
       .where({ id });
     return ban;
+  }
+
+  async function findUserById({ id }) {
+    const db = makeDb();
+    const [user] = await db
+      .select()
+      .from("users")
+      .where({ id });
+    return user;
+  }
+
+  async function findBansByUserId({ userId }) {
+    const db = makeDb();
+    const bans = await db
+      .select()
+      .from("bans")
+      .where({ user_id: userId });
+    return bans;
   }
 }
