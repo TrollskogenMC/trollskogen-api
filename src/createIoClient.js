@@ -1,6 +1,5 @@
 import socketIo from "socket.io-client";
 
-
 export default function(url) {
   const io = socketIo(url, {
     forceNew: true
