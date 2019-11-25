@@ -1,10 +1,11 @@
+/* eslint-disable */
 export default function makeGetBans({ listBans }) {
   return async function() {
     try {
       const bans = await listBans();
       return {
         statusCode: 200,
-        body: { bans }
+        body: { bans, kalleanka: 123 }
       };
     } catch (e) {
       console.log(e);
@@ -20,3 +21,4 @@ export default function makeGetBans({ listBans }) {
     }
   };
 }
+/* eslint-enable */
