@@ -25,6 +25,10 @@ const cors = corsMiddleware({
 });
 
 const app = restify.createServer();
+app.pre((req, res, next) => {
+  console.log("request");
+  next();
+});
 app.pre(forceSSL);
 app.pre(cors.preflight);
 app.use(cors.actual);

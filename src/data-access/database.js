@@ -24,6 +24,7 @@ export default function makeServerDb({ makeDb }) {
         "bans.issued_date as issued_date",
         "bans.reason as ban_reason",
         "bans.expiry_date as expiry_date",
+        "bans.is_cancelled as is_cancelled",
         "banned_user.id as banned_user_id",
         "banned_user.last_seen_as as banned_user_name",
         "issued_user.id as issued_user_id",
@@ -49,6 +50,7 @@ export default function makeServerDb({ makeDb }) {
         "bans.issued_date as issued_date",
         "bans.reason as ban_reason",
         "bans.expiry_date as expiry_date",
+        "bans.is_cancelled as is_cancelled",
         "banned_user.id as banned_user_id",
         "banned_user.last_seen_as as banned_user_name",
         "issued_user.id as issued_user_id",
@@ -59,12 +61,14 @@ export default function makeServerDb({ makeDb }) {
       .table("bans")
       .innerJoin("users as banned_user", "banned_user.id", "bans.user_id")
       .innerJoin("users as issued_user", "issued_user.id", "bans.issued_by")
-      .innerJoin(
+      .leftJoin(
         "users as cancelled_user",
         "cancelled_user.id",
         "bans.cancelled_by"
       )
-      .whereRaw("bans.expiry_date is null or bans.expiry_date >= now()");
+      .whereRaw(
+        "(bans.expiry_date is null or bans.expiry_date >= now()) and is_cancelled = false"
+      );
   }
 
   async function findAllUsers() {
@@ -73,7 +77,7 @@ export default function makeServerDb({ makeDb }) {
       SELECT u.*,
        bool_or(b.id IS NOT NULL
                AND (b.expiry_date IS NULL
-                    OR b.expiry_date < now())) AS is_banned
+                    OR b.expiry_date < now()) AND b.is_cancelled = false) AS is_banned
       FROM users u
       FULL JOIN bans b ON u.id = b.user_id
       GROUP BY u.id
@@ -173,8 +177,27 @@ export default function makeServerDb({ makeDb }) {
   async function findBanById({ id }) {
     const db = makeDb();
     const [ban] = await db
-      .select()
+      .select([
+        "bans.id as ban_id",
+        "bans.issued_date as issued_date",
+        "bans.reason as ban_reason",
+        "bans.expiry_date as expiry_date",
+        "bans.is_cancelled as is_cancelled",
+        "banned_user.id as banned_user_id",
+        "banned_user.last_seen_as as banned_user_name",
+        "issued_user.id as issued_user_id",
+        "issued_user.last_seen_as as issued_user_name",
+        "cancelled_user.id as cancelled_user_id",
+        "cancelled_user.last_seen_as as cancelled_user_name"
+      ])
       .from("bans")
+      .innerJoin("users as banned_user", "banned_user.id", "bans.user_id")
+      .innerJoin("users as issued_user", "issued_user.id", "bans.issued_by")
+      .leftJoin(
+        "users as cancelled_user",
+        "cancelled_user.id",
+        "bans.cancelled_by"
+      )
       .where({ id });
     return ban;
   }
@@ -191,8 +214,27 @@ export default function makeServerDb({ makeDb }) {
   async function findBansByUserId({ userId }) {
     const db = makeDb();
     const bans = await db
-      .select()
+      .select([
+        "bans.id as ban_id",
+        "bans.issued_date as issued_date",
+        "bans.reason as ban_reason",
+        "bans.expiry_date as expiry_date",
+        "bans.is_cancelled as is_cancelled",
+        "banned_user.id as banned_user_id",
+        "banned_user.last_seen_as as banned_user_name",
+        "issued_user.id as issued_user_id",
+        "issued_user.last_seen_as as issued_user_name",
+        "cancelled_user.id as cancelled_user_id",
+        "cancelled_user.last_seen_as as cancelled_user_name"
+      ])
       .from("bans")
+      .innerJoin("users as banned_user", "banned_user.id", "bans.user_id")
+      .innerJoin("users as issued_user", "issued_user.id", "bans.issued_by")
+      .leftJoin(
+        "users as cancelled_user",
+        "cancelled_user.id",
+        "bans.cancelled_by"
+      )
       .where({ user_id: userId });
     return bans;
   }
