@@ -2,18 +2,21 @@ import util from "util";
 
 export default function makeServerDb({ makeDb }) {
   return Object.freeze({
-    findAllBans,
-    findActiveBans,
-    findAllUsers,
-    findUserByTokenOrDiscordId,
-    findUserByMinecraftId,
-    updateVerifiedUser,
     createOrUpdateUserWithToken,
+    findActiveBans,
+    findAllBans,
     findAllHomes,
-    insertBan,
+    findAllUsers,
     findBanById,
+    findBansByUserId,
+    findHomeById,
+    findHomesByUserId,
     findUserById,
-    findBansByUserId
+    findUserByMinecraftId,
+    findUserByTokenOrDiscordId,
+    insertBan,
+    insertHome,
+    updateVerifiedUser
   });
 
   async function findAllBans() {
@@ -105,10 +108,10 @@ export default function makeServerDb({ makeDb }) {
       .transacting(trx)
       .where({ verify_token: token })
       .update({
+        discord_user_id: discordUserId,
         is_verified: true,
-        verify_token_date: date,
         verify_token: null,
-        discord_user_id: discordUserId
+        verify_token_date: date
       });
   }
 
@@ -122,18 +125,18 @@ export default function makeServerDb({ makeDb }) {
     const now = new Date();
     const insert = db("users")
       .insert({
+        last_seen_as: lastSeenAs,
         minecraft_uuid: minecraftUserId,
         verify_token: token,
-        verify_token_created: now,
-        last_seen_as: lastSeenAs
+        verify_token_created: now
       })
       .toString();
 
     const update = db("users")
       .update({
+        last_seen_as: lastSeenAs,
         verify_token: token,
-        verify_token_created: now,
-        last_seen_as: lastSeenAs
+        verify_token_created: now
       })
       .whereRaw(
         `users.minecraft_uuid = '${minecraftUserId}' AND users.is_verified = false`
@@ -151,10 +154,24 @@ export default function makeServerDb({ makeDb }) {
 
   async function findAllHomes() {
     const db = makeDb();
-    const result = await db.raw(`
-      SELECT * FROM homes
-    `);
-    return result.rows;
+    const rows = await db
+      .select([
+        "homes.id as home_id",
+        "homes.name as home_name",
+        "homes.x as x",
+        "homes.y as y",
+        "homes.z as z",
+        "homes.world as world",
+        "homes.pitch as pitch",
+        "homes.yaw as yaw",
+        "homes.is_open as is_open",
+        "homes.allow_commands as allow_commands",
+        "home_user.id as home_user_id",
+        "home_user.last_seen_as as home_user_name"
+      ])
+      .from("homes")
+      .innerJoin("users as home_user", "home_user.id", "homes.user_id");
+    return rows;
   }
 
   async function insertBan(banInfo) {
@@ -237,5 +254,58 @@ export default function makeServerDb({ makeDb }) {
       )
       .where({ user_id: userId });
     return bans;
+  }
+
+  async function findHomeById({ id }) {
+    const db = makeDb();
+    const [ban] = await db
+      .select([
+        "homes.id as home_id",
+        "homes.name as home_name",
+        "homes.x as x",
+        "homes.y as y",
+        "homes.z as z",
+        "homes.world as world",
+        "homes.pitch as pitch",
+        "homes.yaw as yaw",
+        "homes.is_open as is_open",
+        "homes.allow_commands as allow_commands",
+        "home_user.id as home_user_id",
+        "home_user.last_seen_as as home_user_name"
+      ])
+      .from("homes")
+      .innerJoin("users as home_user", "home_user.id", "homes.user_id")
+      .where({ "homes.id": id });
+    return ban;
+  }
+
+  async function findHomesByUserId({ userId }) {
+    const db = makeDb();
+    return db
+      .select([
+        "homes.id as home_id",
+        "homes.name as home_name",
+        "homes.x as x",
+        "homes.y as y",
+        "homes.z as z",
+        "homes.world as world",
+        "homes.pitch as pitch",
+        "homes.yaw as yaw",
+        "homes.is_open as is_open",
+        "homes.allow_commands as allow_commands",
+        "home_user.id as home_user_id",
+        "home_user.last_seen_as as home_user_name"
+      ])
+      .from("homes")
+      .innerJoin("users as home_user", "home_user.id", "homes.user_id")
+      .where({ "homes.user_id": userId });
+  }
+
+  async function insertHome(homeInfo) {
+    const db = makeDb();
+    const [id] = await db("homes")
+      .returning("id")
+      .insert(homeInfo);
+    return id;
   }
 }

@@ -5,7 +5,9 @@ import {
   listHomes,
   addBan,
   retrieveBan,
-  retrieveUser
+  retrieveUser,
+  addHome,
+  retrieveHome
 } from "../use-cases/index.js";
 import makeGetBans from "./getBans.js";
 import makeGetActiveBans from "./getActiveBans.js";
@@ -15,6 +17,8 @@ import makeGetHomes from "./getHomes.js";
 import makePostBan from "./postBan.js";
 import makeGetBan from "./getBan.js";
 import makeGetUser from "./getUser.js";
+import makePostHome from "./postHome.js";
+import makeGetHome from "./getHome.js";
 
 const getBans = makeGetBans({ listBans });
 const getUsers = makeGetUsers({ listUsers });
@@ -24,14 +28,18 @@ const getHomes = makeGetHomes({ listHomes });
 const postBan = makePostBan({ addBan });
 const getBan = makeGetBan({ retrieveBan });
 const getUser = makeGetUser({ retrieveUser });
+const postHome = makePostHome({ addHome });
+const getHome = makeGetHome({ retrieveHome });
 
 export {
+  getActiveBans,
+  getBan,
   getBans,
   getUsers,
   getToken,
-  getActiveBans,
   getHomes,
+  getUser,
+  getHome,
   postBan,
-  getBan,
-  getUser
+  postHome
 };

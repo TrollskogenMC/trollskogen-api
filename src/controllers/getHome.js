@@ -1,12 +1,12 @@
-export default function makeGetBan({ retrieveBan }) {
+export default function makeGetHome({ retrieveHome }) {
   return async function(httpRequest) {
     try {
-      const ban = await retrieveBan({ id: httpRequest.params.id });
-      if (!ban) {
+      const home = await retrieveHome({ id: httpRequest.params.id });
+      if (!home) {
         return { statusCode: 404 };
       }
       return {
-        body: { ban },
+        body: { home },
         statusCode: 200
       };
     } catch (e) {

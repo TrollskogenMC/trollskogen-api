@@ -9,3 +9,5 @@ Available routes:
 * GET /ban/:id - Retrieve a single ban
 * GET /user/:id - Retrieve a single user
 * GET /homes - List all homes
+* GET /home/:id - Retrieve a single home
+* POST /home - Add a new home

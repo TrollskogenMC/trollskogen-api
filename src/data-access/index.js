@@ -1,5 +1,9 @@
+import pg from "pg";
 import knex from "knex";
 import makeServerDb from "./database.js";
+
+// https://github.com/knex/knex/issues/927#issuecomment-130485134
+pg.types.setTypeParser(1700, Number);
 
 const SSL_SUFFIX = "?ssl=true";
 

@@ -1,18 +1,18 @@
 export default function makeExpressCallback(controller) {
   return (req, res) => {
     const httpRequest = {
-      body: req.body,
-      query: req.query,
-      params: req.params,
-      ip: req.ip,
-      method: req.method,
-      path: req.path,
+      body: req.body || {},
       headers: {
+        "API-key": req.header("API-key"),
         "Content-Type": req.header("Content-Type"),
         Referer: req.header("referer"),
-        "User-Agent": req.header("User-Agent"),
-        "API-key": req.header("API-key")
-      }
+        "User-Agent": req.header("User-Agent")
+      },
+      ip: req.ip,
+      method: req.method,
+      params: req.params,
+      path: req.path,
+      query: req.query
     };
     controller(httpRequest)
       .then((httpResponse) => {

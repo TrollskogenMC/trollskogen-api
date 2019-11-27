@@ -3,19 +3,19 @@ export default function makeGetHomes({ listHomes }) {
     try {
       const homes = await listHomes();
       return {
-        statusCode: 200,
-        body: { homes }
+        body: { homes },
+        statusCode: 200
       };
     } catch (e) {
       console.log(e);
       return {
+        body: {
+          error: e.message
+        },
         headers: {
           "Content-Type": "application/json"
         },
-        statusCode: 400,
-        body: {
-          error: e.message
-        }
+        statusCode: 400
       };
     }
   };

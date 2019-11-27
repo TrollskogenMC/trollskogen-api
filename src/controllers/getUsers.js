@@ -3,19 +3,19 @@ export default function makeGetUsers({ listUsers }) {
     try {
       const users = await listUsers();
       return {
-        statusCode: 200,
-        body: users
+        body: users,
+        statusCode: 200
       };
     } catch (e) {
       console.log(e);
       return {
+        body: {
+          error: e.message
+        },
         headers: {
           "Content-Type": "application/json"
         },
-        statusCode: 400,
-        body: {
-          error: e.message
-        }
+        statusCode: 400
       };
     }
   };

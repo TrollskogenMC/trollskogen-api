@@ -6,19 +6,19 @@ export default function makeGetUser({ retrieveUser }) {
         return { statusCode: 404 };
       }
       return {
-        statusCode: 200,
-        body: { user }
+        body: { user },
+        statusCode: 200
       };
     } catch (e) {
       console.log(e);
       return {
+        body: {
+          error: e.message
+        },
         headers: {
           "Content-Type": "application/json"
         },
-        statusCode: 400,
-        body: {
-          error: e.message
-        }
+        statusCode: 400
       };
     }
   };

@@ -12,9 +12,9 @@ export default function makeSaveToken({ db }) {
 
     const token = crypto.randomBytes(3).toString("hex");
     const modifiedRows = await db.createOrUpdateUserWithToken({
-      token,
+      lastSeenAs,
       minecraftUserId,
-      lastSeenAs
+      token
     });
 
     if (modifiedRows === 0) {

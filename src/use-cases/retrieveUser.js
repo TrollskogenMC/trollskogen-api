@@ -9,6 +9,9 @@ export default function makeRetrieveUser({ db }) {
     }
     const bans = await db.findBansByUserId({ userId: id });
     user.bans = bans;
+
+    const homes = await db.findHomesByUserId({ userId: id });
+    user.homes = homes;
     return user;
   };
 }

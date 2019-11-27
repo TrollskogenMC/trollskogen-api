@@ -17,14 +17,14 @@ export default function buildMakeBan() {
     }
 
     return Object.freeze({
-      getUserId: () => userId,
-      getIssuedDate: () => new Date(),
-      getIssuedBy: () => issuerId,
-      getReason: () => reason,
-      getExpiryDate: () => (expiryDate ? new Date(expiryDate) : null),
-      isCancelled: () => false,
       getCancelledBy: () => null,
-      getCancelledDate: () => null
+      getCancelledDate: () => null,
+      getExpiryDate: () => (expiryDate ? new Date(expiryDate) : null),
+      getIssuedBy: () => issuerId,
+      getIssuedDate: () => new Date(),
+      getReason: () => reason,
+      getUserId: () => userId,
+      isCancelled: () => false
     });
   };
 }

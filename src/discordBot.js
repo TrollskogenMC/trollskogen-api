@@ -66,7 +66,11 @@ export default class DiscordBot {
     const trx = await trxProvider();
     let modifiedRows;
     try {
-      user = await db.findUserByTokenOrDiscordId({ token, discordUserId, trx });
+      user = await db.findUserByTokenOrDiscordId({
+        discordUserId,
+        token,
+        trx
+      });
       if (user && user.is_verified) {
         replyAlreadyVerified(message);
         return;
@@ -88,9 +92,9 @@ export default class DiscordBot {
       }
 
       modifiedRows = await db.updateVerifiedUser({
-        token,
         date: now,
         discordUserId,
+        token,
         trx
       });
 

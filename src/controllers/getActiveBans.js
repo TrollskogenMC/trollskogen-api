@@ -3,19 +3,19 @@ export default function makeGetActiveBans({ listBans }) {
     try {
       const bans = await listBans({ active: true });
       return {
-        statusCode: 200,
-        body: { bans }
+        body: { bans },
+        statusCode: 200
       };
     } catch (e) {
       console.log(e);
       return {
+        body: {
+          error: e.message
+        },
         headers: {
           "Content-Type": "application/json"
         },
-        statusCode: 400,
-        body: {
-          error: e.message
-        }
+        statusCode: 400
       };
     }
   };
