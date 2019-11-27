@@ -8,3 +8,4 @@ Available routes:
 * POST /ban - Add a new ban
 * GET /ban/:id - Retrieve a single ban
 * GET /user/:id - Retrieve a single user
+* GET /homes - List all homes
