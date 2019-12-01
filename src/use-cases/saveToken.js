@@ -1,23 +1,15 @@
 import crypto from "crypto";
 
-export default function makeSaveToken({ db }) {
-  return async function({ minecraftUserId, lastSeenAs }) {
-    if (!minecraftUserId) {
-      throw new Error("You must supply a minecraft user id.");
-    }
-
-    if (!lastSeenAs) {
-      throw new Error("You must supply last seen as.");
-    }
-
+export default function makeSaveToken({ editUser }) {
+  return async function({ id }) {
     const token = crypto.randomBytes(3).toString("hex");
-    const modifiedRows = await db.createOrUpdateUserWithToken({
-      lastSeenAs,
-      minecraftUserId,
-      token
+    const user = await editUser({
+      id,
+      verify_token: token,
+      verify_token_created: new Date()
     });
 
-    if (modifiedRows === 0) {
+    if (!user) {
       return null;
     }
 

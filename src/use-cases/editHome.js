@@ -1,6 +1,6 @@
 import makeHome from "../home/index.js";
 
-export default function makeAddHome({ db }) {
+export default function({ db }) {
   return async function({ id, ...changes }) {
     if (!id) {
       throw new Error("You must supply an id.");

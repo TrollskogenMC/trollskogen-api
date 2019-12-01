@@ -1,19 +1,18 @@
-export default function makeGetToken({ saveToken }) {
+export default function makePostUser({ addUser }) {
   return async function(httpRequest) {
+    if (httpRequest.headers["API-key"] !== process.env.API_KEY) {
+      return { statusCode: 401 };
+    }
     try {
-      const token = await saveToken({
-        lastSeenAs: httpRequest.query.lastSeenAs,
-        minecraftUserId: httpRequest.query.userId
-      });
+      const posted = await addUser(httpRequest.body);
       return {
-        body: { token },
+        body: { posted },
         headers: {
           "Content-Type": "application/json"
         },
-        statusCode: 200
+        statusCode: 201
       };
     } catch (e) {
-      console.log(e);
       return {
         body: {
           error: e.message

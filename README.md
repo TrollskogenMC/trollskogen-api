@@ -4,7 +4,7 @@ REST API used by trollskogen website and minecraft server. It follows the [clean
 
 Exposed routes:
 * GET /users - List all users
-* GET /create-token - Creates a verification token
+* PUT /create-token - Create a verification token
 * GET /bans - List all bans
 * GET /bans/active - List active bans
 * POST /ban - Add a new ban
@@ -14,5 +14,7 @@ Exposed routes:
 * GET /home/:id - Retrieve a single home
 * POST /home - Add a new home
 * PATCH /home/:id - Edit a home
+* POST /user - Add a new user
+* PATCH /user/:id - Edit a user
 
 Fields in request objects and response objects are to be written in [snake_case](https://en.wikipedia.org/wiki/Snake_case) fashion.

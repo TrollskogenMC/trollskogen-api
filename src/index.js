@@ -3,7 +3,7 @@ import restify from "restify";
 import {
   getBans,
   getUsers,
-  getToken,
+  putToken,
   getActiveBans,
   getHomes,
   postBan,
@@ -11,7 +11,9 @@ import {
   getUser,
   postHome,
   getHome,
-  patchHome
+  patchHome,
+  postUser,
+  patchUser
 } from "./controllers/index.js";
 import DiscordBot from "./discordBot.js";
 import createIOClient from "./createIoClient.js";
@@ -37,7 +39,7 @@ app.use(restify.plugins.bodyParser());
 app.get("/bans", makeCallback(getBans));
 app.get("/bans/active", makeCallback(getActiveBans));
 app.get("/users", makeCallback(getUsers));
-app.get("/create-token", makeCallback(getToken));
+app.put("/create-token", makeCallback(putToken));
 app.get("/homes", makeCallback(getHomes));
 app.post("/ban", makeCallback(postBan));
 app.get("/ban/:id(^[0-9]+$)", makeCallback(getBan));
@@ -45,6 +47,8 @@ app.get("/user/:id(^[0-9]+$)", makeCallback(getUser));
 app.get("/home/:id(^[0-9]+$)", makeCallback(getHome));
 app.post("/home", makeCallback(postHome));
 app.patch("/home/:id(^[0-9]+$)", makeCallback(patchHome));
+app.post("/user", makeCallback(postUser));
+app.patch("/user/:id(^[0-9]+$)", makeCallback(patchUser));
 
 // const racesEndpoint = require("./routeHandlers/races/race");
 

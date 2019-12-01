@@ -114,12 +114,12 @@ export default class DiscordBot {
       const discordName = guildMember.nickname
         ? guildMember.nickname
         : message.author.username;
-      const hasSameName = discordName === user.last_seen_as;
+      const hasSameName = discordName === user.name;
       await guildMember.addRole(this.guild.roles.find("name", "Verifierad"));
 
       if (!hasSameName) {
         guildMember
-          .setNickname(user.last_seen_as)
+          .setNickname(user.name)
           .then(console.log)
           .catch(console.error);
         replyNicknameChange(message);

@@ -8,12 +8,14 @@ import {
   retrieveUser,
   editHome,
   addHome,
-  retrieveHome
+  retrieveHome,
+  addUser,
+  editUser
 } from "../use-cases/index.js";
 import makeGetBans from "./getBans.js";
 import makeGetActiveBans from "./getActiveBans.js";
 import makeGetUsers from "./getUsers.js";
-import makeGetToken from "./getToken.js";
+import makePutToken from "./putToken.js";
 import makeGetHomes from "./getHomes.js";
 import makePostBan from "./postBan.js";
 import makeGetBan from "./getBan.js";
@@ -21,10 +23,12 @@ import makeGetUser from "./getUser.js";
 import makePostHome from "./postHome.js";
 import makeGetHome from "./getHome.js";
 import makePatchHome from "./patchHome.js";
+import makePostUser from "./postUser.js";
+import makePatchUser from "./patchUser.js";
 
 const getBans = makeGetBans({ listBans });
 const getUsers = makeGetUsers({ listUsers });
-const getToken = makeGetToken({ saveToken });
+const putToken = makePutToken({ saveToken });
 const getActiveBans = makeGetActiveBans({ listBans });
 const getHomes = makeGetHomes({ listHomes });
 const postBan = makePostBan({ addBan });
@@ -33,17 +37,21 @@ const getUser = makeGetUser({ retrieveUser });
 const postHome = makePostHome({ addHome });
 const getHome = makeGetHome({ retrieveHome });
 const patchHome = makePatchHome({ editHome });
+const postUser = makePostUser({ addUser });
+const patchUser = makePatchUser({ editUser });
 
 export {
   getActiveBans,
   getBan,
   getBans,
   getUsers,
-  getToken,
+  putToken,
   getHomes,
   getUser,
   getHome,
   postBan,
   postHome,
-  patchHome
+  patchHome,
+  postUser,
+  patchUser
 };

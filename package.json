@@ -20,7 +20,8 @@
   "scripts": {
     "start": "nodemon --require dotenv/config --experimental-modules src/index.js",
     "start_prod": "cross-env NODE_ENV=production node --require dotenv/config --experimental-modules src/index.js",
-    "migrate_prod": "cross-env NODE_ENV=production knex migrate:latest"
+    "migrate": "node --require dotenv/config --experimental-modules scripts/migrate.js cross-env",
+    "migrate:make": "node --require dotenv/config --experimental-modules scripts/migrateMake.js"
   },
   "dependencies": {
     "discord.js": "^11.5.1",
