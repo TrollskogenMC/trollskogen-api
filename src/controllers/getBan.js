@@ -7,6 +7,9 @@ export default function makeGetBan({ retrieveBan }) {
       }
       return {
         body: { ban },
+        headers: {
+          "Content-Type": "application/json"
+        },
         statusCode: 200
       };
     } catch (e) {

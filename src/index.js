@@ -10,7 +10,8 @@ import {
   getBan,
   getUser,
   postHome,
-  getHome
+  getHome,
+  patchHome
 } from "./controllers/index.js";
 import DiscordBot from "./discordBot.js";
 import createIOClient from "./createIoClient.js";
@@ -41,8 +42,9 @@ app.get("/homes", makeCallback(getHomes));
 app.post("/ban", makeCallback(postBan));
 app.get("/ban/:id(^[0-9]+$)", makeCallback(getBan));
 app.get("/user/:id(^[0-9]+$)", makeCallback(getUser));
-app.post("/home", makeCallback(postHome));
 app.get("/home/:id(^[0-9]+$)", makeCallback(getHome));
+app.post("/home", makeCallback(postHome));
+app.patch("/home/:id(^[0-9]+$)", makeCallback(patchHome));
 
 // const racesEndpoint = require("./routeHandlers/races/race");
 
@@ -75,4 +77,4 @@ function shutItDown() {
 }
 
 process.on("SIGTERM", shutItDown);
-process.on("SIGTERM", shutItDown);
+process.on("SIGINT", shutItDown);

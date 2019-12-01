@@ -1,23 +1,22 @@
-export default function buildMakeHome({ getBoolean }) {
+export default function buildMakeHome() {
   return function({
-    allowCommands,
-    isOpen,
+    allow_commands,
+    is_open,
     name,
-    userId,
+    user_id,
     pitch,
     world,
     x,
     y,
     yaw,
-    z
+    z,
+    id
   }) {
-    const boolAllowCommands = getBoolean(allowCommands);
-    if (boolAllowCommands === null) {
+    if (typeof allow_commands !== "boolean") {
       throw new Error("Home must have an allowCommands flag");
     }
 
-    const boolIsOpen = getBoolean(isOpen);
-    if (typeof boolIsOpen !== "boolean") {
+    if (typeof is_open !== "boolean") {
       throw new Error("Home must have an isOpen flag");
     }
 
@@ -25,7 +24,7 @@ export default function buildMakeHome({ getBoolean }) {
       throw new Error("Home must have a name.");
     }
 
-    if (!userId) {
+    if (!user_id) {
       throw new Error("Home must have a user id.");
     }
 
@@ -34,16 +33,17 @@ export default function buildMakeHome({ getBoolean }) {
     }
 
     return Object.freeze({
-      getAllowCommands: () => boolAllowCommands,
+      getAllowCommands: () => allow_commands,
+      getId: () => id,
       getName: () => name,
       getPitch: () => pitch,
-      getUserId: () => userId,
+      getUserId: () => user_id,
       getWorld: () => world,
       getX: () => x,
       getY: () => y,
       getYaw: () => yaw,
       getZ: () => z,
-      isOpen: () => boolIsOpen
+      isOpen: () => is_open
     });
   };
 }

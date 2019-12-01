@@ -8,6 +8,7 @@ import makeRetrieveBan from "./retrieveBan.js";
 import makeRetrieveUser from "./retrieveUser.js";
 import makeRetrieveHome from "./retrieveHome.js";
 import makeAddHome from "./addHome.js";
+import makeEditHome from "./editHome.js";
 
 const listBans = makeListBans({ db });
 const listUsers = makeListUsers({ db });
@@ -18,9 +19,11 @@ const retrieveBan = makeRetrieveBan({ db });
 const retrieveUser = makeRetrieveUser({ db });
 const retrieveHome = makeRetrieveHome({ db });
 const addHome = makeAddHome({ db });
+const editHome = makeEditHome({ db });
 
 export {
   addBan,
+  editHome,
   listBans,
   listUsers,
   saveToken,

@@ -16,6 +16,7 @@ export default function makeServerDb({ makeDb }) {
     findUserByTokenOrDiscordId,
     insertBan,
     insertHome,
+    updateHome,
     updateVerifiedUser
   });
 
@@ -156,8 +157,8 @@ export default function makeServerDb({ makeDb }) {
     const db = makeDb();
     const rows = await db
       .select([
-        "homes.id as home_id",
-        "homes.name as home_name",
+        "homes.id as id",
+        "homes.name as name",
         "homes.x as x",
         "homes.y as y",
         "homes.z as z",
@@ -166,8 +167,8 @@ export default function makeServerDb({ makeDb }) {
         "homes.yaw as yaw",
         "homes.is_open as is_open",
         "homes.allow_commands as allow_commands",
-        "home_user.id as home_user_id",
-        "home_user.last_seen_as as home_user_name"
+        "home_user.id as user_id",
+        "home_user.last_seen_as as user_name"
       ])
       .from("homes")
       .innerJoin("users as home_user", "home_user.id", "homes.user_id");
@@ -179,7 +180,7 @@ export default function makeServerDb({ makeDb }) {
     const [id] = await db("bans")
       .returning("id")
       .insert(banInfo);
-    return id;
+    return { id, ...banInfo };
   }
 
   async function findUserByMinecraftId({ minecraftId }) {
@@ -260,8 +261,8 @@ export default function makeServerDb({ makeDb }) {
     const db = makeDb();
     const [ban] = await db
       .select([
-        "homes.id as home_id",
-        "homes.name as home_name",
+        "homes.id as id",
+        "homes.name as name",
         "homes.x as x",
         "homes.y as y",
         "homes.z as z",
@@ -270,8 +271,8 @@ export default function makeServerDb({ makeDb }) {
         "homes.yaw as yaw",
         "homes.is_open as is_open",
         "homes.allow_commands as allow_commands",
-        "home_user.id as home_user_id",
-        "home_user.last_seen_as as home_user_name"
+        "home_user.id as user_id",
+        "home_user.last_seen_as as user_name"
       ])
       .from("homes")
       .innerJoin("users as home_user", "home_user.id", "homes.user_id")
@@ -283,8 +284,8 @@ export default function makeServerDb({ makeDb }) {
     const db = makeDb();
     return db
       .select([
-        "homes.id as home_id",
-        "homes.name as home_name",
+        "homes.id as id",
+        "homes.name as name",
         "homes.x as x",
         "homes.y as y",
         "homes.z as z",
@@ -293,8 +294,8 @@ export default function makeServerDb({ makeDb }) {
         "homes.yaw as yaw",
         "homes.is_open as is_open",
         "homes.allow_commands as allow_commands",
-        "home_user.id as home_user_id",
-        "home_user.last_seen_as as home_user_name"
+        "home_user.id as user_id",
+        "home_user.last_seen_as as user_name"
       ])
       .from("homes")
       .innerJoin("users as home_user", "home_user.id", "homes.user_id")
@@ -306,6 +307,17 @@ export default function makeServerDb({ makeDb }) {
     const [id] = await db("homes")
       .returning("id")
       .insert(homeInfo);
-    return id;
+    return { id, ...homeInfo };
+  }
+
+  async function updateHome({ id, ...homeInfo }) {
+    const db = makeDb();
+    const modifiedRows = await db("homes")
+      .where({ id })
+      .update(homeInfo);
+    if (modifiedRows > 0) {
+      return homeInfo;
+    }
+    return {};
   }
 }

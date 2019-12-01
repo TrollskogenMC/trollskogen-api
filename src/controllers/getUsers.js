@@ -3,7 +3,10 @@ export default function makeGetUsers({ listUsers }) {
     try {
       const users = await listUsers();
       return {
-        body: users,
+        body: { users },
+        headers: {
+          "Content-Type": "application/json"
+        },
         statusCode: 200
       };
     } catch (e) {

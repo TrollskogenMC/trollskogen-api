@@ -7,6 +7,9 @@ export default function makeGetToken({ saveToken }) {
       });
       return {
         body: { token },
+        headers: {
+          "Content-Type": "application/json"
+        },
         statusCode: 200
       };
     } catch (e) {

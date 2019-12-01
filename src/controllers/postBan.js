@@ -4,15 +4,18 @@ export default function makePostBan({ addBan }) {
       return { statusCode: 401 };
     }
     try {
-      const { userId, expiryDate, issuerId, reason } = httpRequest.body;
-      const banId = await addBan({
-        expiryDate,
-        issuerId,
+      const { user_id, expiry_date, issuer_id, reason } = httpRequest.body;
+      const ban = await addBan({
+        expiry_date,
+        issuer_id,
         reason,
-        userId
+        user_id
       });
       return {
-        body: { pathToBan: `/ban/${banId}` },
+        body: { posted: ban },
+        headers: {
+          "Content-Type": "application/json"
+        },
         statusCode: 201
       };
     } catch (e) {

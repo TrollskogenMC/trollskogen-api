@@ -7,6 +7,9 @@ export default function makeGetUser({ retrieveUser }) {
       }
       return {
         body: { user },
+        headers: {
+          "Content-Type": "application/json"
+        },
         statusCode: 200
       };
     } catch (e) {

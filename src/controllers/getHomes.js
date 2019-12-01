@@ -4,6 +4,9 @@ export default function makeGetHomes({ listHomes }) {
       const homes = await listHomes();
       return {
         body: { homes },
+        headers: {
+          "Content-Type": "application/json"
+        },
         statusCode: 200
       };
     } catch (e) {

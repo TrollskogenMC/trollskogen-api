@@ -5,6 +5,9 @@ export default function makeGetBans({ listBans }) {
       const bans = await listBans();
       return {
         statusCode: 200,
+        headers: {
+          "Content-Type": "application/json"
+        },
         body: { bans }
       };
     } catch (e) {
