@@ -10,7 +10,13 @@ import {
   addHome,
   retrieveHome,
   addUser,
-  editUser
+  editUser,
+  removeHome,
+  editBan,
+  listAnnouncements,
+  addAnnouncement,
+  removeAnnouncement,
+  editAnnouncement
 } from "../use-cases/index.js";
 import makeGetBans from "./getBans.js";
 import makeGetActiveBans from "./getActiveBans.js";
@@ -25,6 +31,12 @@ import makeGetHome from "./getHome.js";
 import makePatchHome from "./patchHome.js";
 import makePostUser from "./postUser.js";
 import makePatchUser from "./patchUser.js";
+import makeDeleteHome from "./deleteHome.js";
+import makePatchBan from "./patchBan.js";
+import makeGetAnnouncements from "./getAnnouncements.js";
+import makePostAnnouncement from "./postAnnouncement.js";
+import makeDeleteAnnouncement from "./deleteAnnouncement.js";
+import makePatchAnnouncement from "./patchAnnouncement.js";
 
 const getBans = makeGetBans({ listBans });
 const getUsers = makeGetUsers({ listUsers });
@@ -39,8 +51,16 @@ const getHome = makeGetHome({ retrieveHome });
 const patchHome = makePatchHome({ editHome });
 const postUser = makePostUser({ addUser });
 const patchUser = makePatchUser({ editUser });
+const deleteHome = makeDeleteHome({ removeHome });
+const patchBan = makePatchBan({ editBan });
+const getAnnouncements = makeGetAnnouncements({ listAnnouncements });
+const postAnnouncement = makePostAnnouncement({ addAnnouncement });
+const deleteAnnouncement = makeDeleteAnnouncement({ removeAnnouncement });
+const patchAnnouncement = makePatchAnnouncement({ editAnnouncement });
 
 export {
+  deleteAnnouncement,
+  deleteHome,
   getActiveBans,
   getBan,
   getBans,
@@ -53,5 +73,9 @@ export {
   postHome,
   patchHome,
   postUser,
-  patchUser
+  patchUser,
+  getAnnouncements,
+  postAnnouncement,
+  patchAnnouncement,
+  patchBan
 };

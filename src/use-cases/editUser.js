@@ -22,6 +22,7 @@ export default function({ db }) {
       discord_user_id: user.getDiscordUserId(),
       id: user.getId(),
       is_verified: user.isVerified(),
+      last_join_date: user.getLastJoinDate(),
       minecraft_uuid: user.getMinecraftUUID(),
       name: user.getName(),
       verify_date: user.getVerifyDate(),

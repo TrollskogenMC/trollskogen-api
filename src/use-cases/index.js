@@ -11,6 +11,12 @@ import makeAddHome from "./addHome.js";
 import makeEditHome from "./editHome.js";
 import makeAddUser from "./addUser.js";
 import makeEditUser from "./editUser.js";
+import makeRemoveHome from "./removeHome.js";
+import makeEditBan from "./editBan.js";
+import makeAddAnnouncement from "./addAnnouncement.js";
+import makeRemoveAnnouncement from "./removeAnnouncement.js";
+import makeListAnnouncements from "./listAnnouncements.js";
+import makeEditAnnouncement from "./editAnnouncement.js";
 
 const listBans = makeListBans({ db });
 const listUsers = makeListUsers({ db });
@@ -24,8 +30,15 @@ const editHome = makeEditHome({ db });
 const addUser = makeAddUser({ db });
 const editUser = makeEditUser({ db });
 const saveToken = makeSaveToken({ db, editUser });
+const removeHome = makeRemoveHome({ db });
+const editBan = makeEditBan({ db });
+const addAnnouncement = makeAddAnnouncement({ db });
+const removeAnnouncement = makeRemoveAnnouncement({ db });
+const listAnnouncements = makeListAnnouncements({ db });
+const editAnnouncement = makeEditAnnouncement({ db });
 
 export {
+  addAnnouncement,
   addBan,
   editHome,
   listBans,
@@ -37,5 +50,10 @@ export {
   retrieveHome,
   addHome,
   addUser,
-  editUser
+  editUser,
+  removeHome,
+  editBan,
+  removeAnnouncement,
+  editAnnouncement,
+  listAnnouncements
 };

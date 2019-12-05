@@ -3,6 +3,7 @@ export default function buildMakeUser() {
     id,
     minecraft_uuid,
     name,
+    last_join_date = null,
     is_verified = false,
     discord_user_id = null,
     verify_token = null,
@@ -20,6 +21,7 @@ export default function buildMakeUser() {
     return Object.freeze({
       getDiscordUserId: () => discord_user_id,
       getId: () => id,
+      getLastJoinDate: () => last_join_date,
       getMinecraftUUID: () => minecraft_uuid,
       getName: () => name,
       getVerifyDate: () => verify_date,

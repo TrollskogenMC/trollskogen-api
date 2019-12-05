@@ -7,6 +7,7 @@ export default function makeAddUser({ db }) {
     return db.insertUser({
       discord_user_id: user.getDiscordUserId(),
       is_verified: user.isVerified(),
+      last_join_date: user.getLastJoinDate(),
       minecraft_uuid: user.getMinecraftUUID(),
       name: user.getName(),
       verify_date: user.getVerifyDate(),

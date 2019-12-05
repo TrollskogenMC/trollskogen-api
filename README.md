@@ -3,18 +3,28 @@
 REST API used by trollskogen website and minecraft server. It follows the [clean architecture](https://blog.cleancoder.com/uncle-bob/2012/08/13/the-clean-architecture.html).
 
 Exposed routes:
-* GET /users - List all users
 * PUT /create-token - Create a verification token
+---
 * GET /bans - List all bans
 * GET /bans/active - List active bans
 * POST /ban - Add a new ban
 * GET /ban/:id - Retrieve a single ban
+* PATCH /ban/:id - Edit a ban
+---
+* GET /users - List all users
 * GET /user/:id - Retrieve a single user
+* POST /user - Add a new user
+* PATCH /user/:id - Edit a user
+---
 * GET /homes - List all homes
 * GET /home/:id - Retrieve a single home
 * POST /home - Add a new home
 * PATCH /home/:id - Edit a home
-* POST /user - Add a new user
-* PATCH /user/:id - Edit a user
+* DELETE /home/:id - Remove a home
+---
+* GET /announcements
+* POST /announcement
+* DELETE /announcement/:id
+* PATCH /announcement/:id
 
-Fields in request objects and response objects are to be written in [snake_case](https://en.wikipedia.org/wiki/Snake_case) fashion.
+Fields in request objects and response objects are to be written in a [snake_case](https://en.wikipedia.org/wiki/Snake_case) fashion.

@@ -13,7 +13,13 @@ import {
   getHome,
   patchHome,
   postUser,
-  patchUser
+  patchUser,
+  deleteHome,
+  patchBan,
+  getAnnouncements,
+  postAnnouncement,
+  deleteAnnouncement,
+  patchAnnouncement
 } from "./controllers/index.js";
 import DiscordBot from "./discordBot.js";
 import createIOClient from "./createIoClient.js";
@@ -36,35 +42,25 @@ app.use(cors.actual);
 app.use(restify.plugins.acceptParser(app.acceptable));
 app.use(restify.plugins.queryParser());
 app.use(restify.plugins.bodyParser());
+app.put("/create-token", makeCallback(putToken));
 app.get("/bans", makeCallback(getBans));
 app.get("/bans/active", makeCallback(getActiveBans));
-app.get("/users", makeCallback(getUsers));
-app.put("/create-token", makeCallback(putToken));
-app.get("/homes", makeCallback(getHomes));
 app.post("/ban", makeCallback(postBan));
 app.get("/ban/:id(^[0-9]+$)", makeCallback(getBan));
+app.patch("/ban/:id(^[0-9]+$)", makeCallback(patchBan));
+app.get("/users", makeCallback(getUsers));
 app.get("/user/:id(^[0-9]+$)", makeCallback(getUser));
+app.post("/user", makeCallback(postUser));
+app.patch("/user/:id(^[0-9]+$)", makeCallback(patchUser));
+app.get("/homes", makeCallback(getHomes));
 app.get("/home/:id(^[0-9]+$)", makeCallback(getHome));
 app.post("/home", makeCallback(postHome));
 app.patch("/home/:id(^[0-9]+$)", makeCallback(patchHome));
-app.post("/user", makeCallback(postUser));
-app.patch("/user/:id(^[0-9]+$)", makeCallback(patchUser));
-
-// const racesEndpoint = require("./routeHandlers/races/race");
-
-// app.post("/races/race", wrapHandler(racesEndpoint.create));
-// app.post("/races/race/addStart", wrapHandler(racesEndpoint.addStartPoint));
-// app.del("/races/race/start", wrapHandler(racesEndpoint.deleteStartPoint));
-// app.del("/races/race", wrapHandler(racesEndpoint.delete));
-// app.put("/races/race", wrapHandler(racesEndpoint.update));
-
-// const createCheckpoint = require("./routeHandlers/createCheckpoint/createCheckpoint");
-// app.post("/race/point", wrapHandler(createCheckpoint));
-
-// const deleteCheckpoint = require("./routeHandlers/deleteCheckpoint/deleteCheckpoint");
-// app.del("/race/point", wrapHandler(deleteCheckpoint));
-
-// app.get("/races", wrapHandler(require("./routeHandlers/getRaces")));
+app.del("/home/:id(^[0-9]+$)", makeCallback(deleteHome));
+app.get("/announcements", makeCallback(getAnnouncements));
+app.post("/announcement", makeCallback(postAnnouncement));
+app.del("/announcement/:id(^[0-9]+$)", makeCallback(deleteAnnouncement));
+app.patch("/announcement/:id(^[0-9]+$)", makeCallback(patchAnnouncement));
 
 app.listen(process.env.PORT, () => {
   console.log("Server is listening at port %s", process.env.PORT);

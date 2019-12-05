@@ -1,9 +1,11 @@
 export default function makeServerDb({ makeDb }) {
   return Object.freeze({
     findActiveBans,
+    findAllAnnouncements,
     findAllBans,
     findAllHomes,
     findAllUsers,
+    findAnnouncementById,
     findBanById,
     findBansByUserId,
     findHomeById,
@@ -11,9 +13,14 @@ export default function makeServerDb({ makeDb }) {
     findUserById,
     findUserByMinecraftId,
     findUserByTokenOrDiscordId,
+    insertAnnouncement,
     insertBan,
     insertHome,
     insertUser,
+    removeAnnouncement,
+    removeHome,
+    updateAnnouncement,
+    updateBan,
     updateHome,
     updateUser,
     updateVerifiedUser
@@ -23,17 +30,18 @@ export default function makeServerDb({ makeDb }) {
     const db = makeDb();
     return db
       .select([
-        "bans.id as ban_id",
+        "bans.id as id",
         "bans.issued_date as issued_date",
-        "bans.reason as ban_reason",
+        "bans.reason as reason",
         "bans.expiry_date as expiry_date",
         "bans.is_cancelled as is_cancelled",
-        "banned_user.id as banned_user_id",
+        "banned_user.id as user_id",
         "banned_user.name as banned_user_name",
-        "issued_user.id as issued_user_id",
+        "issued_user.id as issued_by",
         "issued_user.name as issued_user_name",
-        "cancelled_user.id as cancelled_user_id",
-        "cancelled_user.name as cancelled_user_name"
+        "cancelled_user.id as cancelled_by",
+        "cancelled_user.name as cancelled_user_name",
+        "bans.cancelled_date"
       ])
       .table("bans")
       .innerJoin("users as banned_user", "banned_user.id", "bans.user_id")
@@ -49,17 +57,18 @@ export default function makeServerDb({ makeDb }) {
     const db = makeDb();
     return db
       .select([
-        "bans.id as ban_id",
+        "bans.id as id",
         "bans.issued_date as issued_date",
-        "bans.reason as ban_reason",
+        "bans.reason as reason",
         "bans.expiry_date as expiry_date",
         "bans.is_cancelled as is_cancelled",
-        "banned_user.id as banned_user_id",
+        "banned_user.id as user_id",
         "banned_user.name as banned_user_name",
-        "issued_user.id as issued_user_id",
+        "issued_user.id as issued_by",
         "issued_user.name as issued_user_name",
-        "cancelled_user.id as cancelled_user_id",
-        "cancelled_user.name as cancelled_user_name"
+        "cancelled_user.id as cancelled_by",
+        "cancelled_user.name as cancelled_user_name",
+        "bans.cancelled_date"
       ])
       .table("bans")
       .innerJoin("users as banned_user", "banned_user.id", "bans.user_id")
@@ -158,17 +167,18 @@ export default function makeServerDb({ makeDb }) {
     const db = makeDb();
     const [ban] = await db
       .select([
-        "bans.id as ban_id",
+        "bans.id as id",
         "bans.issued_date as issued_date",
-        "bans.reason as ban_reason",
+        "bans.reason as reason",
         "bans.expiry_date as expiry_date",
         "bans.is_cancelled as is_cancelled",
-        "banned_user.id as banned_user_id",
+        "banned_user.id as user_id",
         "banned_user.name as banned_user_name",
-        "issued_user.id as issued_user_id",
+        "issued_user.id as issued_by",
         "issued_user.name as issued_user_name",
-        "cancelled_user.id as cancelled_user_id",
-        "cancelled_user.name as cancelled_user_name"
+        "cancelled_user.id as cancelled_by",
+        "cancelled_user.name as cancelled_user_name",
+        "bans.cancelled_date"
       ])
       .from("bans")
       .innerJoin("users as banned_user", "banned_user.id", "bans.user_id")
@@ -178,7 +188,7 @@ export default function makeServerDb({ makeDb }) {
         "cancelled_user.id",
         "bans.cancelled_by"
       )
-      .where({ id });
+      .where({ "bans.id": id });
     return ban;
   }
 
@@ -195,17 +205,18 @@ export default function makeServerDb({ makeDb }) {
     const db = makeDb();
     const bans = await db
       .select([
-        "bans.id as ban_id",
+        "bans.id as id",
         "bans.issued_date as issued_date",
-        "bans.reason as ban_reason",
+        "bans.reason as reason",
         "bans.expiry_date as expiry_date",
         "bans.is_cancelled as is_cancelled",
-        "banned_user.id as banned_user_id",
+        "banned_user.id as user_id",
         "banned_user.name as banned_user_name",
-        "issued_user.id as issued_user_id",
+        "issued_user.id as issued_by",
         "issued_user.name as issued_user_name",
-        "cancelled_user.id as cancelled_user_id",
-        "cancelled_user.name as cancelled_user_name"
+        "cancelled_user.id as cancelled_by",
+        "cancelled_user.name as cancelled_user_name",
+        "bans.cancelled_date"
       ])
       .from("bans")
       .innerJoin("users as banned_user", "banned_user.id", "bans.user_id")
@@ -298,6 +309,64 @@ export default function makeServerDb({ makeDb }) {
       .update(userInfo);
     if (modifiedRows > 0) {
       return userInfo;
+    }
+    return {};
+  }
+
+  async function removeHome({ id }) {
+    const db = makeDb();
+    await db("homes")
+      .where({ id })
+      .delete();
+  }
+
+  async function updateBan({ id, ...banInfo }) {
+    const db = makeDb();
+    const modifiedRows = await db("bans")
+      .where({ id })
+      .update(banInfo);
+    if (modifiedRows > 0) {
+      return banInfo;
+    }
+    return {};
+  }
+
+  async function insertAnnouncement(announcementInfo) {
+    const db = makeDb();
+    const [id] = await db("announcements")
+      .returning("id")
+      .insert(announcementInfo);
+    return { id, ...announcementInfo };
+  }
+
+  async function removeAnnouncement({ id }) {
+    const db = makeDb();
+    await db("announcements")
+      .where({ id })
+      .delete();
+  }
+
+  async function findAllAnnouncements() {
+    const db = makeDb();
+    return db.select().from("announcements");
+  }
+
+  async function findAnnouncementById({ id }) {
+    const db = makeDb();
+    const [announcement] = await db
+      .select()
+      .from("announcements")
+      .where({ id });
+    return announcement;
+  }
+
+  async function updateAnnouncement({ id, ...announcementInfo }) {
+    const db = makeDb();
+    const modifiedRows = await db("announcements")
+      .where({ id })
+      .update(announcementInfo);
+    if (modifiedRows > 0) {
+      return announcementInfo;
     }
     return {};
   }
