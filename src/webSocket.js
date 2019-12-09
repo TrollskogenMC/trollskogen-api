@@ -22,12 +22,11 @@ export default (httpServer, bot) => {
     }
     const connection = request.accept("", request.origin);
 
-    bot.on("verified", (user) => {
-      console.log("verified user", user);
+    bot.on("verified", (info) => {
       connection.sendUTF(
         JSON.stringify({
           type: "verified",
-          user
+          ...info
         })
       );
     });

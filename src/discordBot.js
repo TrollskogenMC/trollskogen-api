@@ -67,29 +67,31 @@ export default class DiscordBot extends EventEmitter {
     const trxProvider = database.transactionProvider();
     const trx = await trxProvider();
     let modifiedRows;
+    const now = new Date();
     try {
       user = await db.findUserByTokenOrDiscordId({
         discordUserId,
         token,
         trx
       });
+
       if (user && user.is_verified) {
         replyAlreadyVerified(message);
+        trx.rollback();
         return;
-      }
-
-      if (!user) {
+      } else if (user && user.verify_token !== token) {
         replyInvalidToken(message);
+        trx.rollback();
         return;
       }
 
-      const now = new Date();
       const diffMinutes =
         (now.getTime() - new Date(user.verify_token_created).getTime()) /
         1000 /
         60;
       if (diffMinutes >= 15) {
         replyExpiredToken(message);
+        trx.rollback();
         return;
       }
 
@@ -109,7 +111,13 @@ export default class DiscordBot extends EventEmitter {
     }
 
     if (modifiedRows === 1) {
-      this.emit("verified", { user });
+      this.emit("verified", {
+        discordUserId,
+        isVerified: true,
+        userId: user.id,
+        verifyDate: now,
+        verifyToken: null
+      });
       replyVerifiedSuccessfully(message);
       const guildMember = await this.guild.fetchMember(message.author);
 

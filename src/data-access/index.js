@@ -12,13 +12,19 @@ if (!connectionString.endsWith(SSL_SUFFIX)) {
   connectionString += SSL_SUFFIX;
 }
 
-const instance = knex({
+const options = {
   client: "postgresql",
   connection: connectionString,
   migrations: {
     tableName: "knex_migrations"
   }
-});
+};
+
+if (process.env.NODE_ENV === "development") {
+  options.pool = { max: 1, min: 0 };
+}
+
+const instance = knex(options);
 
 const db = makeServerDb({ makeDb });
 

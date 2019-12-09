@@ -19,11 +19,12 @@ import {
   getAnnouncements,
   postAnnouncement,
   deleteAnnouncement,
-  patchAnnouncement
+  patchAnnouncement,
+  notFound
 } from "./controllers/index.js";
 import DiscordBot from "./discordBot.js";
 import forceSSL from "./forceSsl.js";
-import makeCallback from "./expressCallback.js";
+import { makeCallback, makeErrorCallback } from "./expressCallback.js";
 import createWebSocket from "./webSocket.js";
 
 if (!process.env.API_KEY) {
@@ -61,6 +62,8 @@ app.get("/announcements", makeCallback(getAnnouncements));
 app.post("/announcement", makeCallback(postAnnouncement));
 app.del("/announcement/:id(^[0-9]+$)", makeCallback(deleteAnnouncement));
 app.patch("/announcement/:id(^[0-9]+$)", makeCallback(patchAnnouncement));
+
+app.on("NotFound", makeErrorCallback(notFound));
 
 const bot = new DiscordBot();
 

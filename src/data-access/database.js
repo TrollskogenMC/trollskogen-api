@@ -147,7 +147,6 @@ export default function makeServerDb({ makeDb }) {
   }
 
   async function insertBan(banInfo) {
-    console.log(banInfo);
     const db = makeDb();
     const [id] = await db("bans")
       .returning("id")

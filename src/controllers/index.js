@@ -37,6 +37,7 @@ import makeGetAnnouncements from "./getAnnouncements.js";
 import makePostAnnouncement from "./postAnnouncement.js";
 import makeDeleteAnnouncement from "./deleteAnnouncement.js";
 import makePatchAnnouncement from "./patchAnnouncement.js";
+import makeNotFound from "./notFound.js";
 
 const getBans = makeGetBans({ listBans });
 const getUsers = makeGetUsers({ listUsers });
@@ -57,6 +58,7 @@ const getAnnouncements = makeGetAnnouncements({ listAnnouncements });
 const postAnnouncement = makePostAnnouncement({ addAnnouncement });
 const deleteAnnouncement = makeDeleteAnnouncement({ removeAnnouncement });
 const patchAnnouncement = makePatchAnnouncement({ editAnnouncement });
+const notFound = makeNotFound({});
 
 export {
   deleteAnnouncement,
@@ -77,5 +79,6 @@ export {
   getAnnouncements,
   postAnnouncement,
   patchAnnouncement,
-  patchBan
+  patchBan,
+  notFound
 };
