@@ -22,10 +22,6 @@ export default function buildMakeBan() {
       throw new Error("Ban must have a user id.");
     }
 
-    if (!issued_by) {
-      throw new Error("Ban must have an issuer id.");
-    }
-
     return Object.freeze({
       getCancelledBy: () => (cancelled_by ? cancelled_by : null),
       getCancelledDate: () => (cancelled_date ? cancelled_date : null),
@@ -36,7 +32,7 @@ export default function buildMakeBan() {
       getReason: () => reason,
       getUserId: () => user_id,
       isCancelled: () =>
-        typeof is_cancelled !== "boolean" ? is_cancelled : false
+        typeof is_cancelled === "boolean" ? is_cancelled : false
     });
   };
 }

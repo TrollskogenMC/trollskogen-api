@@ -1,10 +1,13 @@
+import { EventEmitter } from "events";
 import Discord from "discord.js";
 import db, { makeDb } from "./data-access/index.js";
 
 const TROLLSKOGEN_GUILD = "540217517164068922";
 
-export default class DiscordBot {
+export default class DiscordBot extends EventEmitter {
   constructor() {
+    super();
+
     this.handleReady = this.handleReady.bind(this);
     this.handleMessage = this.handleMessage.bind(this);
 
@@ -16,8 +19,7 @@ export default class DiscordBot {
     this.client = client;
   }
 
-  start(io) {
-    this.io = io;
+  start() {
     this.client.login(process.env.BOT_TOKEN);
   }
 
@@ -107,7 +109,7 @@ export default class DiscordBot {
     }
 
     if (modifiedRows === 1) {
-      this.io.emit("verified", { userId: user.minecraft_uuid });
+      this.emit("verified", { user });
       replyVerifiedSuccessfully(message);
       const guildMember = await this.guild.fetchMember(message.author);
 

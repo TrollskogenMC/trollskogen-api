@@ -22,9 +22,9 @@ import {
   patchAnnouncement
 } from "./controllers/index.js";
 import DiscordBot from "./discordBot.js";
-import createIOClient from "./createIoClient.js";
 import forceSSL from "./forceSsl.js";
 import makeCallback from "./expressCallback.js";
+import createWebSocket from "./webSocket.js";
 
 if (!process.env.API_KEY) {
   throw new Error("Application requires API_KEY to be set.");
@@ -62,15 +62,19 @@ app.post("/announcement", makeCallback(postAnnouncement));
 app.del("/announcement/:id(^[0-9]+$)", makeCallback(deleteAnnouncement));
 app.patch("/announcement/:id(^[0-9]+$)", makeCallback(patchAnnouncement));
 
+const bot = new DiscordBot();
+
+let ws;
 app.listen(process.env.PORT, () => {
   console.log("Server is listening at port %s", process.env.PORT);
+  bot.start();
+  ws = createWebSocket(app.server, bot);
 });
 
-const io = createIOClient(process.env.WEBSOCKET_URL);
-const bot = new DiscordBot();
-bot.start(io);
-
 function shutItDown() {
+  if (ws) {
+    ws.shutDown();
+  }
   app.close(() => {
     bot.destroy();
   });

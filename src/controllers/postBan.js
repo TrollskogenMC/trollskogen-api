@@ -4,10 +4,10 @@ export default function makePostBan({ addBan }) {
       return { statusCode: 401 };
     }
     try {
-      const { user_id, expiry_date, issuer_id, reason } = httpRequest.body;
+      const { user_id, expiry_date, issued_by, reason } = httpRequest.body;
       const ban = await addBan({
         expiry_date,
-        issuer_id,
+        issued_by,
         reason,
         user_id
       });
