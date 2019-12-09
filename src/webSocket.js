@@ -15,11 +15,16 @@ export default (httpServer, bot) => {
     if (!originIsAllowed(request.origin)) {
       // Make sure we only accept requests from an allowed origin
       request.reject();
-      console.log(
-        `${new Date()} Connection from origin ${request.origin} rejected.`
-      );
+      console.log(`Connection from origin ${request.origin} rejected.`);
       return;
     }
+
+    if (request.httpRequest.headers["api-key"] !== process.env.API_KEY) {
+      request.reject();
+      console.log(`Connection from origin ${request.origin} rejected.`);
+      return;
+    }
+
     const connection = request.accept("", request.origin);
 
     bot.on("verified", (info) => {
@@ -31,21 +36,15 @@ export default (httpServer, bot) => {
       );
     });
 
-    console.log(`${new Date()} Connection accepted.`);
+    console.log(`Connection accepted from ${connection.remoteAddress}.`);
     connection.on("message", (message) => {
       if (message.type === "utf8") {
-        console.log(`Received Message: ${message.utf8Data}`);
         connection.sendUTF(message.utf8Data);
-      } else if (message.type === "binary") {
-        console.log(
-          `Received Binary Message of ${message.binaryData.length} bytes`
-        );
-        connection.sendBytes(message.binaryData);
       }
     });
     connection.on("close", (reason, description) => {
       console.log(
-        `${new Date()} Peer ${connection.remoteAddress} disconnected.`,
+        `Peer ${connection.remoteAddress} disconnected.`,
         reason,
         description
       );

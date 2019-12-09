@@ -3,6 +3,7 @@ export default function makeServerDb({ makeDb }) {
     findActiveBans,
     findAllAnnouncements,
     findAllBans,
+    findAllChat,
     findAllHomes,
     findAllUsers,
     findAnnouncementById,
@@ -15,6 +16,7 @@ export default function makeServerDb({ makeDb }) {
     findUserByTokenOrDiscordId,
     insertAnnouncement,
     insertBan,
+    insertChat,
     insertHome,
     insertUser,
     removeAnnouncement,
@@ -369,5 +371,22 @@ export default function makeServerDb({ makeDb }) {
       return announcementInfo;
     }
     return {};
+  }
+
+  async function findAllChat() {
+    const db = makeDb();
+    return db
+      .select()
+      .from("chat")
+      .limit(100)
+      .orderBy("posted", "desc");
+  }
+
+  async function insertChat(chatInfo) {
+    const db = makeDb();
+    const [id] = await db("chat")
+      .returning("id")
+      .insert(chatInfo);
+    return { id, ...chatInfo };
   }
 }

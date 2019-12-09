@@ -1,9 +1,9 @@
-export default function makeGetBans({ listBans }) {
+export default function makeGetChat({ listChat }) {
   return async function() {
     try {
-      const bans = await listBans();
+      const messages = await listChat();
       return {
-        body: { bans },
+        body: { messages },
         headers: {
           "Content-Type": "application/json"
         },

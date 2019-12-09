@@ -22,9 +22,13 @@ Exposed routes:
 * PATCH /home/:id - Edit a home
 * DELETE /home/:id - Remove a home
 ---
-* GET /announcements
-* POST /announcement
-* DELETE /announcement/:id
-* PATCH /announcement/:id
+* GET /announcements - List all announcements
+* POST /announcement - Add a new announcement
+* DELETE /announcement/:id - Remove an announcement
+* PATCH /announcement/:id - Edit an announcement
+---
+* GET /chat - List all chat messages
+* POST /chat - Add a new chat message
+
 
 Fields in request objects and response objects are to be written in a [snake_case](https://en.wikipedia.org/wiki/Snake_case) fashion.

@@ -17,6 +17,8 @@ import makeAddAnnouncement from "./addAnnouncement.js";
 import makeRemoveAnnouncement from "./removeAnnouncement.js";
 import makeListAnnouncements from "./listAnnouncements.js";
 import makeEditAnnouncement from "./editAnnouncement.js";
+import makeListChat from "./listChat.js";
+import makeAddChat from "./addChat.js";
 
 const listBans = makeListBans({ db });
 const listUsers = makeListUsers({ db });
@@ -36,12 +38,15 @@ const addAnnouncement = makeAddAnnouncement({ db });
 const removeAnnouncement = makeRemoveAnnouncement({ db });
 const listAnnouncements = makeListAnnouncements({ db });
 const editAnnouncement = makeEditAnnouncement({ db });
+const listChat = makeListChat({ db });
+const addChat = makeAddChat({ db });
 
 export {
   addAnnouncement,
   addBan,
   editHome,
   listBans,
+  listChat,
   listUsers,
   saveToken,
   listHomes,
@@ -55,5 +60,6 @@ export {
   editBan,
   removeAnnouncement,
   editAnnouncement,
+  addChat,
   listAnnouncements
 };
