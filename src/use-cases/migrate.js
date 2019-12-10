@@ -1,4 +1,3 @@
-import fs from "fs";
 import yaml from "js-yaml";
 
 /* eslint-disable no-useless-escape */
