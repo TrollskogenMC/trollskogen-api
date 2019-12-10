@@ -19,6 +19,7 @@ export default function makeServerDb({ makeDb }) {
     insertChat,
     insertHome,
     insertUser,
+    insertUserSession,
     removeAnnouncement,
     removeHome,
     updateAnnouncement,
@@ -388,5 +389,13 @@ export default function makeServerDb({ makeDb }) {
       .returning("id")
       .insert(chatInfo);
     return { id, ...chatInfo };
+  }
+
+  async function insertUserSession(userSessionInfo) {
+    const db = makeDb();
+    const [id] = await db("user_sessions")
+      .returning("id")
+      .insert(userSessionInfo);
+    return { id, ...userSessionInfo };
   }
 }

@@ -23,7 +23,8 @@ import {
   notFound,
   postChat,
   getChat,
-  postMigrate
+  postMigrate,
+  postUserSession
 } from "./controllers/index.js";
 import DiscordBot from "./discordBot.js";
 import forceSSL from "./forceSsl.js";
@@ -68,6 +69,7 @@ app.patch("/announcement/:id(^[0-9]+$)", makeCallback(patchAnnouncement));
 app.get("/chat", makeCallback(getChat));
 app.post("/chat", makeCallback(postChat));
 app.post("/migrate", makeCallback(postMigrate));
+app.post("/user-session", makeCallback(postUserSession));
 
 app.on("NotFound", makeErrorCallback(notFound));
 

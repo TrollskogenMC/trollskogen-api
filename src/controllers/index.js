@@ -19,7 +19,8 @@ import {
   editAnnouncement,
   listChat,
   addChat,
-  migrate
+  migrate,
+  addUserSession
 } from "../use-cases/index.js";
 import makeGetBans from "./getBans.js";
 import makeGetActiveBans from "./getActiveBans.js";
@@ -44,6 +45,7 @@ import makeNotFound from "./notFound.js";
 import makeGetChat from "./getChat.js";
 import makePostChat from "./postChat.js";
 import makeMigrate from "./postMigrate.js";
+import makePostUserSession from "./postUserSession.js";
 
 const getBans = makeGetBans({ listBans });
 const getUsers = makeGetUsers({ listUsers });
@@ -68,6 +70,7 @@ const notFound = makeNotFound({});
 const getChat = makeGetChat({ listChat });
 const postChat = makePostChat({ addChat });
 const postMigrate = makeMigrate({ migrate });
+const postUserSession = makePostUserSession({ addUserSession });
 
 export {
   deleteAnnouncement,
@@ -92,5 +95,6 @@ export {
   patchBan,
   postChat,
   postMigrate,
+  postUserSession,
   notFound
 };

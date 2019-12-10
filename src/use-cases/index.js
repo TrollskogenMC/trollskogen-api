@@ -20,6 +20,7 @@ import makeEditAnnouncement from "./editAnnouncement.js";
 import makeListChat from "./listChat.js";
 import makeAddChat from "./addChat.js";
 import makeMigrate from "./migrate.js";
+import makeUserSession from "./addUserSession.js";
 
 const listBans = makeListBans({ db });
 const listUsers = makeListUsers({ db });
@@ -42,6 +43,7 @@ const editAnnouncement = makeEditAnnouncement({ db });
 const listChat = makeListChat({ db });
 const addChat = makeAddChat({ db });
 const migrate = makeMigrate({ addBan, addHome, addUser, db });
+const addUserSession = makeUserSession({ db });
 
 export {
   addAnnouncement,
@@ -64,5 +66,6 @@ export {
   editAnnouncement,
   addChat,
   listAnnouncements,
-  migrate
+  migrate,
+  addUserSession
 };
