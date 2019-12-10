@@ -79,7 +79,7 @@ export default class DiscordBot extends EventEmitter {
         replyAlreadyVerified(message);
         trx.rollback();
         return;
-      } else if (user && user.verify_token !== token) {
+      } else if ((user && user.verify_token !== token) || !user) {
         replyInvalidToken(message);
         trx.rollback();
         return;
@@ -155,7 +155,7 @@ function replyExpiredToken(message) {
 }
 
 function replyVerifyError(message) {
-  message.channel.send("Ett oväntat fel inträffade. Admin har meddelats.");
+  message.channel.send("Ett oväntat fel inträffade.");
 }
 
 function replyVerifiedSuccessfully(message) {
