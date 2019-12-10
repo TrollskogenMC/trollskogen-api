@@ -223,7 +223,7 @@ export default function makeServerDb({ makeDb }) {
       ])
       .from("bans")
       .innerJoin("users as banned_user", "banned_user.id", "bans.user_id")
-      .innerJoin("users as issued_user", "issued_user.id", "bans.issued_by")
+      .leftJoin("users as issued_user", "issued_user.id", "bans.issued_by")
       .leftJoin(
         "users as cancelled_user",
         "cancelled_user.id",
