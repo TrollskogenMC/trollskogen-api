@@ -1,7 +1,7 @@
 export default function makeRemoveAnnouncements({ db }) {
   return async function({ id } = {}) {
     if (!id) {
-      throw new Error("You must supply am announcement id.");
+      throw new Error("You must supply an announcement id.");
     }
 
     const announcementToDelete = await db.findAnnouncementById({ id });

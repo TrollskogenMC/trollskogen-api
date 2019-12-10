@@ -18,7 +18,8 @@ import {
   removeAnnouncement,
   editAnnouncement,
   listChat,
-  addChat
+  addChat,
+  migrate
 } from "../use-cases/index.js";
 import makeGetBans from "./getBans.js";
 import makeGetActiveBans from "./getActiveBans.js";
@@ -42,6 +43,7 @@ import makePatchAnnouncement from "./patchAnnouncement.js";
 import makeNotFound from "./notFound.js";
 import makeGetChat from "./getChat.js";
 import makePostChat from "./postChat.js";
+import makeMigrate from "./postMigrate.js";
 
 const getBans = makeGetBans({ listBans });
 const getUsers = makeGetUsers({ listUsers });
@@ -65,6 +67,7 @@ const patchAnnouncement = makePatchAnnouncement({ editAnnouncement });
 const notFound = makeNotFound({});
 const getChat = makeGetChat({ listChat });
 const postChat = makePostChat({ addChat });
+const postMigrate = makeMigrate({ migrate });
 
 export {
   deleteAnnouncement,
@@ -88,5 +91,6 @@ export {
   patchAnnouncement,
   patchBan,
   postChat,
+  postMigrate,
   notFound
 };

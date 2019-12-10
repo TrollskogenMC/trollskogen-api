@@ -22,7 +22,8 @@ import {
   patchAnnouncement,
   notFound,
   postChat,
-  getChat
+  getChat,
+  postMigrate
 } from "./controllers/index.js";
 import DiscordBot from "./discordBot.js";
 import forceSSL from "./forceSsl.js";
@@ -66,6 +67,7 @@ app.del("/announcement/:id(^[0-9]+$)", makeCallback(deleteAnnouncement));
 app.patch("/announcement/:id(^[0-9]+$)", makeCallback(patchAnnouncement));
 app.get("/chat", makeCallback(getChat));
 app.post("/chat", makeCallback(postChat));
+app.post("/migrate", makeCallback(postMigrate));
 
 app.on("NotFound", makeErrorCallback(notFound));
 

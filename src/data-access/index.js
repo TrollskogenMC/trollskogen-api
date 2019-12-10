@@ -19,8 +19,7 @@ const options = {
     tableName: "knex_migrations"
   }
 };
-
-if (process.env.NODE_ENV === "development") {
+if (process.env.NODE_ENV !== "production") {
   options.pool = { max: 1, min: 0 };
 }
 

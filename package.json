@@ -26,6 +26,7 @@
   "dependencies": {
     "discord.js": "^11.5.1",
     "dotenv": "^8.2.0",
+    "js-yaml": "^3.13.1",
     "knex": "^0.20.4",
     "pg": "^7.14.0",
     "restify": "^8.5.0",
