@@ -29,7 +29,7 @@
     "js-yaml": "^3.13.1",
     "knex": "^0.20.4",
     "pg": "^7.14.0",
-    "restify": "^8.5.0",
+    "restify": "^8.5.1",
     "restify-cors-middleware": "^1.1.1",
     "restify-errors": "^8.0.2",
     "uuid": "^3.3.3",
