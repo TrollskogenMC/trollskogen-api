@@ -377,8 +377,15 @@ export default function makeServerDb({ makeDb }) {
   async function findAllChat() {
     const db = makeDb();
     return db
-      .select()
+      .select(
+        "chat.id as id",
+        "chat.user_id as user_id",
+        "chat.posted as posted",
+        "chat.message as message",
+        "users.name as name"
+      )
       .from("chat")
+      .innerJoin("users", "users.id", "user_id")
       .limit(100)
       .orderBy("posted", "desc");
   }
