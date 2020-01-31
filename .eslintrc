@@ -16,6 +16,7 @@
   "plugins": [
     "import",
     "sort-exports",
+    "sort-keys-fix",
     "prettier"
   ],
   "rules": {
@@ -57,7 +58,7 @@
     "symbol-description": "error",
     "template-curly-spacing": "error",
     "yield-star-spacing": "error",
-    "sort-keys": "error",
+    "sort-keys-fix/sort-keys-fix": "warn",
     "sort-exports/sort-exports": "error",
     "eqeqeq": "error",
     "prettier/prettier": "error"
