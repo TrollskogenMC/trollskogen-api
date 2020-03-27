@@ -24,7 +24,7 @@
     "migrate:make": "node --require dotenv/config --experimental-modules scripts/migrateMake.js"
   },
   "dependencies": {
-    "discord.js": "^11.5.1",
+    "discord.js": "^12.1.1",
     "dotenv": "^8.2.0",
     "js-yaml": "^3.13.1",
     "knex": "^0.20.7",
