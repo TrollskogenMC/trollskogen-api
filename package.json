@@ -28,7 +28,7 @@
     "dotenv": "^8.2.0",
     "js-yaml": "^3.13.1",
     "knex": "^0.20.7",
-    "pg": "^7.17.0",
+    "pg": "^8.0.0",
     "restify": "^8.5.1",
     "restify-cors-middleware": "^1.1.1",
     "restify-errors": "^8.0.2",
