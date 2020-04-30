@@ -21,7 +21,9 @@
     "start": "nodemon --require dotenv/config --experimental-modules src/index.js",
     "start_prod": "cross-env NODE_ENV=production node --require dotenv/config --experimental-modules src/index.js",
     "migrate": "node --require dotenv/config --experimental-modules scripts/migrate.js cross-env",
-    "migrate:make": "node --require dotenv/config --experimental-modules scripts/migrateMake.js"
+    "migrate:make": "node --require dotenv/config --experimental-modules scripts/migrateMake.js",
+    "snyk-protect": "snyk protect",
+    "prepare": "npm run snyk-protect"
   },
   "dependencies": {
     "discord.js": "^11.5.1",
@@ -33,7 +35,8 @@
     "restify-cors-middleware": "^1.1.1",
     "restify-errors": "^8.0.2",
     "uuid": "^3.3.3",
-    "websocket": "^1.0.31"
+    "websocket": "^1.0.31",
+    "snyk": "^1.316.1"
   },
   "devDependencies": {
     "babel-eslint": "^10.0.1",
@@ -46,5 +49,6 @@
     "eslint-plugin-sort-keys-fix": "^1.1.0",
     "nodemon": "^2.0.2",
     "prettier": "^1.19.1"
-  }
+  },
+  "snyk": true
 }
