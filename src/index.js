@@ -27,7 +27,6 @@ import {
 } from "./controllers/index.js";
 import forceSSL from "./forceSsl.js";
 import { makeCallback, makeErrorCallback } from "./expressCallback.js";
-import createWebSocket from "./webSocket.js";
 
 if (!process.env.API_KEY) {
   throw new Error("Application requires API_KEY to be set.");
@@ -70,23 +69,6 @@ app.post("/user-session", makeCallback(postUserSession));
 
 app.on("NotFound", makeErrorCallback(notFound));
 
-const bot = new DiscordBot();
-
-let ws;
 app.listen(process.env.PORT, () => {
   console.log("Server is listening at port %s", process.env.PORT);
-  bot.start();
-  ws = createWebSocket(app.server, bot);
 });
-
-function shutItDown() {
-  if (ws) {
-    ws.shutDown();
-  }
-  app.close(() => {
-    bot.destroy();
-  });
-}
-
-process.on("SIGTERM", shutItDown);
-process.on("SIGINT", shutItDown);
