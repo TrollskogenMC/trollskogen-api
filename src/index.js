@@ -25,7 +25,6 @@ import {
   getChat,
   postUserSession
 } from "./controllers/index.js";
-import DiscordBot from "./discordBot.js";
 import forceSSL from "./forceSsl.js";
 import { makeCallback, makeErrorCallback } from "./expressCallback.js";
 import createWebSocket from "./webSocket.js";
