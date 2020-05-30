@@ -25,7 +25,6 @@ import {
   getChat,
   postUserSession
 } from "./controllers/index.js";
-import forceSSL from "./forceSsl.js";
 import { makeCallback, makeErrorCallback } from "./expressCallback.js";
 
 if (!process.env.API_KEY) {
@@ -38,7 +37,6 @@ const cors = corsMiddleware({
 });
 
 const app = restify.createServer();
-app.pre(forceSSL);
 app.pre(cors.preflight);
 app.use(cors.actual);
 app.use(restify.plugins.acceptParser(app.acceptable));
