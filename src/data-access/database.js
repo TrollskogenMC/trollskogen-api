@@ -5,6 +5,7 @@ export default function makeServerDb({ makeDb }) {
     findAllBans,
     findAllChat,
     findAllHomes,
+    findAllOngoingQuests,
     findAllUsers,
     findAnnouncementById,
     findBanById,
@@ -18,13 +19,16 @@ export default function makeServerDb({ makeDb }) {
     insertBan,
     insertChat,
     insertHome,
+    insertOngoingQuest,
     insertUser,
     insertUserSession,
     removeAnnouncement,
     removeHome,
+    removeOngoingQuest,
     updateAnnouncement,
     updateBan,
     updateHome,
+    updateOngoingQuest,
     updateUser,
     updateVerifiedUser
   });
@@ -404,5 +408,51 @@ export default function makeServerDb({ makeDb }) {
       .returning("id")
       .insert(userSessionInfo);
     return { id, ...userSessionInfo };
+  }
+
+  async function findAllOngoingQuests() {
+    const db = makeDb();
+    const rows = await db
+      .select([
+        "ongoingquests.id as id",
+        "ongoingquests.name as name",
+        "ongoingquests.participation as participation",
+        "ongoingquests.is_active as isActive",
+        "ongoingquests_user.id as user_id",
+        "ongoingquests_user.name as user_name"
+      ])
+      .from("ongoingquests")
+      .innerJoin(
+        "users as ongoingquests_user",
+        "ongoingquests_user.id",
+        "ongoingquests.user_id"
+      );
+    return rows;
+  }
+
+  async function insertOngoingQuest(ongoingQuestInfo) {
+    const db = makeDb();
+    const [id] = await db("ongoingquests")
+      .returning("id")
+      .insert(ongoingQuestInfo);
+    return { id, ...ongoingQuestInfo };
+  }
+
+  async function updateOngoingQuest({ id, ...ongoingQuestInfo }) {
+    const db = makeDb();
+    const modifiedRows = await db("ongoingquests")
+      .where({ id })
+      .update(ongoingQuestInfo);
+    if (modifiedRows > 0) {
+      return ongoingQuestInfo;
+    }
+    return {};
+  }
+
+  async function removeOngoingQuest({ id }) {
+    const db = makeDb();
+    await db("ongoingQuests")
+      .where({ id })
+      .delete();
   }
 }
