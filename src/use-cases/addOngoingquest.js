@@ -6,6 +6,7 @@ export default function makeAddOngoingQuest({ db }) {
 
     return db.insertOngoingQuest({
       isActive: ongoingquest.getIsAactive(),
+      is_complete: ongoingQuestInfo.getIsComplete(),
       name: ongoingquest.getName(),
       participation: ongoingquest.getParticipation(),
       quest_id: ongoingquest.getQuestId(),

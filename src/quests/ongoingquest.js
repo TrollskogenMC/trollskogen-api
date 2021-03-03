@@ -1,5 +1,13 @@
 export default function buildMakeonogingQuest() {
-  return function({ name, id, user_id, quest_id, participation, isActive }) {
+  return function({
+    name,
+    id,
+    user_id,
+    quest_id,
+    participation,
+    isActive,
+    is_complete
+  }) {
     if (typeof name !== "string") {
       throw new Error("Ongoingquest must have a name");
     }
@@ -24,9 +32,14 @@ export default function buildMakeonogingQuest() {
       throw new Error("Ongoingquest must have an isActive");
     }
 
+    if (typeof isComplete === "boolean") {
+      throw new Error("Ongoingquest must have an isComplete");
+    }
+
     return Object.freeze({
       getId: () => id,
       getIsAcive: () => isActive,
+      getIsComplete: () => is_complete,
       getName: () => name,
       getParticipation: () => participation,
       getQuestId: () => quest_id,
