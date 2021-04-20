@@ -25,6 +25,9 @@ import makeRetrieveOngoingQuest from "./retrieveOngoingquest.js";
 import makeAddOngoingQuest from "./addOngoingquest.js";
 import makeRemoveOngoingQuest from "./removeOngoinquest.js";
 import makeEditOngoingQuest from "./editOngoingquest.js";
+import makeListActiveOngoingQuests from "./listActiveOngoingquests.js";
+import makeListCompleteOngoingQuests from "./listCompleteOngoingquests.js";
+import makeListTopleteCompleteOngoingQuests from "./listTopCompletedOngoingQuests.js";
 
 const listBans = makeListBans({ db });
 const listUsers = makeListUsers({ db });
@@ -52,7 +55,9 @@ const retrieveOngoingquest = makeRetrieveOngoingQuest({ db });
 const addOngoingQuest = makeAddOngoingQuest({ db });
 const removeOngoingQuest = makeRemoveOngoingQuest({ db });
 const editOngoingQuest = makeEditOngoingQuest({ db });
-
+const listActiveOngoingQuests = makeListActiveOngoingQuests({ db });
+const listCompleteOngoingQuests = makeListCompleteOngoingQuests({ db });
+const listTopleteCompleteOngoingQuests = makeListTopleteCompleteOngoingQuests({db});
 export {
   addAnnouncement,
   addBan,
@@ -79,5 +84,8 @@ export {
   retrieveOngoingquest,
   addOngoingQuest,
   removeOngoingQuest,
-  editOngoingQuest
+  editOngoingQuest,
+  listActiveOngoingQuests,
+  listCompleteOngoingQuests,
+  listTopleteCompleteOngoingQuests
 };

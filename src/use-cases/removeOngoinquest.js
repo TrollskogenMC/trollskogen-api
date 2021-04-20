@@ -3,8 +3,7 @@ export default function makeRemoveOngoingQuest({ db }) {
     if (!id) {
       throw new Error("You must supply a ongoingQuestId id.");
     }
-
-    const onGoingQuest = await db.findOnGoingQuestById({ id });
+    const onGoingQuest = await db.findOngoingQuestById({ id });
 
     if (!onGoingQuest) {
       return deleteNothing();

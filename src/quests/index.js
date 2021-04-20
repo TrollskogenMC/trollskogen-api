@@ -1,5 +1,5 @@
-import buildOngoingquest from "./ongoingquest.js";
+import buildMakeOngoingQuest from "./ongoingquest.js";
 
-const makeOngoingquest = buildOngoingquest();
+const makeOngoingquest = buildMakeOngoingQuest();
 
 export default makeOngoingquest;

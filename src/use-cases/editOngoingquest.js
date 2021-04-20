@@ -20,7 +20,11 @@ export default function makeEditOngoingQuest({ db }) {
     });
 
     const updated = await db.updateOngoingQuest({
-      isActive: ongoingquest.getIsAactive(),
+      activated_on: ongoingquest.getActivatedOn(),
+      expires_on: ongoingquest.getExipiresOn(),
+      id: ongoingquest.getId(),
+      is_active: ongoingquest.getIsActive(),
+      is_complete: ongoingquest.getIsComplete(),
       name: ongoingquest.getName(),
       participation: ongoingquest.getParticipation(),
       quest_id: ongoingquest.getQuestId(),

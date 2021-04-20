@@ -25,6 +25,9 @@ import {
   getChat,
   postUserSession,
   getOngoingQuests,
+  getActiveOngoingQuests,
+  getCompleteOngoingQuests,
+  getTopCompleteOngoingQuests,
   postOngoingQuest,
   patchOngoingQuest,
   deleteOngoingQuest
@@ -36,7 +39,11 @@ if (!process.env.API_KEY) {
 }
 
 const cors = corsMiddleware({
-  origins: ["https://*.netlify.com", "https://trollskogen.nu"],
+  origins: [
+    "https://*.netlify.com",
+    "https://trollskogen.nu",
+    "https://localhost*"
+  ],
   preflightMaxAge: 5
 });
 
@@ -69,6 +76,9 @@ app.get("/chat", makeCallback(getChat));
 app.post("/chat", makeCallback(postChat));
 app.post("/user-session", makeCallback(postUserSession));
 app.get("/ongoingquests", makeCallback(getOngoingQuests));
+app.get("/ongoingquests/active", makeCallback(getActiveOngoingQuests));
+app.get("/ongoingquests/complete", makeCallback(getCompleteOngoingQuests));
+app.get("/ongoingquests/top", makeCallback(getTopCompleteOngoingQuests));
 app.post("/ongoingquests", makeCallback(postOngoingQuest));
 app.patch("/ongoingquests/:id(^[0-9]+$)", makeCallback(patchOngoingQuest));
 app.del("/ongoingquests/:id(^[0-9]+$)", makeCallback(deleteOngoingQuest));

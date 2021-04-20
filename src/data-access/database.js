@@ -3,6 +3,9 @@ export default function makeServerDb({ makeDb }) {
     findActiveBans,
     findAllAnnouncements,
     findAllBans,
+    findAllActiveOngoingQuests,
+    findAllCompleteOngoingQuests,
+    findAllTopCompleteOngoingQuests,
     findAllChat,
     findAllHomes,
     findAllOngoingQuests,
@@ -10,6 +13,7 @@ export default function makeServerDb({ makeDb }) {
     findAnnouncementById,
     findBanById,
     findBansByUserId,
+    findOngoingQuestById,
     findHomeById,
     findHomesByUserId,
     findUserById,
@@ -168,6 +172,31 @@ export default function makeServerDb({ makeDb }) {
       .from("users")
       .where({ minecraft_uuid: minecraftId });
     return user;
+  }
+
+  async function findOngoingQuestById({ id }) {
+    const db = makeDb();
+    const [ongoingquest] = await db
+      .select([
+        "ongoingquests.id as id",
+        "ongoingquests.name as name",
+        "ongoingquests.participation as participation",
+        "ongoingquests.is_active as is_active",
+        "ongoingquests_user.id as user_id",
+        "ongoingquests_user.name as user_name",
+        "ongoingquests.quest_id as quest_id",
+        "ongoingquests.is_complete as is_complete",
+        "ongoingquests.activated_on as activated_on",
+        "ongoingquests.expires_on as expires_on"
+      ])
+      .from("ongoingquests")
+      .innerJoin(
+        "users as ongoingquests_user",
+        "ongoingquests_user.id",
+        "ongoingquests.user_id"
+      )
+      .where({ "ongoingquests.id": id });
+    return ongoingquest;
   }
 
   async function findBanById({ id }) {
@@ -417,9 +446,13 @@ export default function makeServerDb({ makeDb }) {
         "ongoingquests.id as id",
         "ongoingquests.name as name",
         "ongoingquests.participation as participation",
-        "ongoingquests.is_active as isActive",
+        "ongoingquests.is_active as is_active",
+        "ongoingquests.activated_on as activated_on",
         "ongoingquests_user.id as user_id",
-        "ongoingquests_user.name as user_name"
+        "ongoingquests_user.name as user_name",
+        "ongoingquests.quest_id as quest_id",
+        "ongoingquests.is_complete as is_complete",
+        "ongoingquests.expires_on as expires_on"
       ])
       .from("ongoingquests")
       .innerJoin(
@@ -430,11 +463,108 @@ export default function makeServerDb({ makeDb }) {
     return rows;
   }
 
+  async function findAllActiveOngoingQuests() {
+    const db = makeDb();
+    const rows = await db
+      .select([
+        "ongoingquests.id as id",
+        "ongoingquests.name as name",
+        "ongoingquests.participation as participation",
+        "ongoingquests.is_active as is_active",
+        "ongoingquests.activated_on as activated_on",
+        "ongoingquests_user.id as user_id",
+        "ongoingquests_user.name as user_name",
+        "ongoingquests.quest_id as quest_id",
+        "ongoingquests.is_complete as is_complete",
+        "ongoingquests.expires_on as expires_on"
+      ])
+      .from("ongoingquests")
+      .innerJoin(
+        "users as ongoingquests_user",
+        "ongoingquests_user.id",
+        "ongoingquests.user_id"
+      )
+      .where({ is_active: true });
+    return rows;
+  }
+
+  async function findAllCompleteOngoingQuests() {
+    const db = makeDb();
+    const rows = await db
+      .select([
+        "ongoingquests.id as id",
+        "ongoingquests.name as name",
+        "ongoingquests.participation as participation",
+        "ongoingquests.is_active as is_active",
+        "ongoingquests.activated_on as activated_on",
+        "ongoingquests_user.id as user_id",
+        "ongoingquests_user.name as user_name",
+        "ongoingquests.quest_id as quest_id",
+        "ongoingquests.is_complete as is_complete",
+        "ongoingquests.expires_on as expires_on"
+      ])
+      .from("ongoingquests")
+      .innerJoin(
+        "users as ongoingquests_user",
+        "ongoingquests_user.id",
+        "ongoingquests.user_id"
+      )
+      .where({ is_complete: true });
+    return rows;
+  }
+
+  async function findAllTopCompleteOngoingQuests() {
+    const db = makeDb();
+    const rows = await db
+      .select([
+        "ongoingquests.id as id",
+        "ongoingquests.name as name",
+        "ongoingquests.participation as participation",
+        "ongoingquests.is_active as is_active",
+        "ongoingquests.activated_on as activated_on",
+        "ongoingquests_user.id as user_id",
+        "ongoingquests_user.name as user_name",
+        "ongoingquests.quest_id as quest_id",
+        "ongoingquests.is_complete as is_complete",
+        "ongoingquests.expires_on as expires_on"
+      ])
+      .from("ongoingquests")
+      .innerJoin(
+        "users as ongoingquests_user",
+        "ongoingquests_user.id",
+        "ongoingquests.user_id"
+      )
+      .where({ is_complete: true });
+
+    const mappedRows = rows.map((row) => ({
+      user_id: row.user_id,
+      user_name: row.user_name,
+      total_quests: 1
+    }));
+
+    const mergedRows = (mRows) => {
+      const out = [];
+
+      for (const entry of mRows) {
+        const existingEnty = out.find((o) => o.user_id === entry.user_id);
+        if (existingEnty) {
+          existingEnty.total_quests = existingEnty.total_quests + 1;
+        } else {
+          out.push(entry);
+        }
+      }
+      return out;
+    };
+
+    return mergedRows(mappedRows);
+  }
+
   async function insertOngoingQuest(ongoingQuestInfo) {
     const db = makeDb();
     const [id] = await db("ongoingquests")
       .returning("id")
       .insert(ongoingQuestInfo);
+
     return { id, ...ongoingQuestInfo };
   }
 
@@ -451,7 +581,7 @@ export default function makeServerDb({ makeDb }) {
 
   async function removeOngoingQuest({ id }) {
     const db = makeDb();
-    await db("ongoingQuests")
+    await db("ongoingquests")
       .where({ id })
       .delete();
   }

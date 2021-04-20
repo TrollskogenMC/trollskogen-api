@@ -5,8 +5,10 @@ export default function makeAddOngoingQuest({ db }) {
     const ongoingquest = makeOngoingQuest(ongoingQuestInfo);
 
     return db.insertOngoingQuest({
-      isActive: ongoingquest.getIsAactive(),
-      is_complete: ongoingQuestInfo.getIsComplete(),
+      activated_on: ongoingquest.getActivatedOn(),
+      expires_on: ongoingquest.getExipiresOn(),
+      is_active: ongoingquest.getIsActive(),
+      is_complete: ongoingquest.getIsComplete(),
       name: ongoingquest.getName(),
       participation: ongoingquest.getParticipation(),
       quest_id: ongoingquest.getQuestId(),

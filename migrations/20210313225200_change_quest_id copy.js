@@ -1,10 +1,12 @@
 exports.up = async (knex) => {
   await knex.schema.alterTable("ongoingquests", async (table) => {
-    table.increments();
-    await table.boolean("is_complete").alter();
+    await table
+      .string("quest_id")
+      .notNullable()
+      .alter();
   });
 };
 exports.down = (knex) =>
   knex.schema.alterTable("ongoingquests", (table) => {
-    table.boolean("is_complete").alter();
+    table.string("quest_id").alter();
   });

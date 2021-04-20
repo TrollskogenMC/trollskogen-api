@@ -1,19 +1,17 @@
-export default function buildMakeonogingQuest() {
+export default function buildMakeOngoingQuest() {
   return function({
     name,
     id,
     user_id,
     quest_id,
     participation,
-    isActive,
-    is_complete
+    is_active,
+    is_complete,
+    activated_on,
+    expires_on
   }) {
     if (typeof name !== "string") {
       throw new Error("Ongoingquest must have a name");
-    }
-
-    if (!id) {
-      throw new Error("Ongoingquest must have an id");
     }
 
     if (!user_id) {
@@ -24,26 +22,31 @@ export default function buildMakeonogingQuest() {
       throw new Error("Ongoingquest must have a quest_id");
     }
 
-    if (participation >= 0) {
+    if (!Number.isInteger(participation)) {
       throw new Error("Ongoingquest must have a participation");
     }
 
-    if (typeof isActive === "boolean") {
+    if (typeof is_active !== "boolean") {
       throw new Error("Ongoingquest must have an isActive");
     }
 
-    if (typeof isComplete === "boolean") {
+    if (typeof is_complete !== "boolean") {
       throw new Error("Ongoingquest must have an isComplete");
     }
 
     return Object.freeze({
+      getActivatedOn: () =>
+        activated_on
+          ? new Date(activated_on).toISOString()
+          : new Date().toISOString(),
       getId: () => id,
-      getIsAcive: () => isActive,
+      getIsActive: () => is_active,
       getIsComplete: () => is_complete,
       getName: () => name,
       getParticipation: () => participation,
       getQuestId: () => quest_id,
-      getUserId: () => user_id
+      getUserId: () => user_id,
+      getExipiresOn: () => expires_on
     });
   };
 }

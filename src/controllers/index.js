@@ -21,6 +21,9 @@ import {
   addChat,
   addUserSession,
   listOngoingQuests,
+  listCompleteOngoingQuests,
+  listActiveOngoingQuests,
+  listTopleteCompleteOngoingQuests,
   addOngoingQuest,
   editOngoingQuest,
   removeOngoingQuest
@@ -50,8 +53,11 @@ import makePostChat from "./postChat.js";
 import makePostUserSession from "./postUserSession.js";
 import makePostOngoingQuest from "./postOngoingQuest.js";
 import makeGetOngoingQuests from "./getOngoingQuests.js";
+import makeGetCompleteOngoingQuests from "./getCompleteOngoingQuests.js";
+import makeActiveOngoingQuests from "./getActiveOngoingQuests.js";
 import makeDeleteOngoingQuest from "./deleteOngoingQuest.js";
 import makePatchOngoingQuest from "./patchOngoingQuest.js";
+import makeGetTopCompleteOngoingQuests from "./getTopCompleteOngoingquests.js";
 
 const getBans = makeGetBans({ listBans });
 const getUsers = makeGetUsers({ listUsers });
@@ -77,6 +83,15 @@ const getChat = makeGetChat({ listChat });
 const postChat = makePostChat({ addChat });
 const postUserSession = makePostUserSession({ addUserSession });
 const getOngoingQuests = makeGetOngoingQuests({ listOngoingQuests });
+const getActiveOngoingQuests = makeActiveOngoingQuests({
+  listActiveOngoingQuests
+});
+const getCompleteOngoingQuests = makeGetCompleteOngoingQuests({
+  listCompleteOngoingQuests
+});
+const getTopCompleteOngoingQuests = makeGetTopCompleteOngoingQuests({
+  listTopleteCompleteOngoingQuests
+});
 const postOngoingQuest = makePostOngoingQuest({ addOngoingQuest });
 const deleteOngoingQuest = makeDeleteOngoingQuest({ removeOngoingQuest });
 const patchOngoingQuest = makePatchOngoingQuest({ editOngoingQuest });
@@ -106,6 +121,9 @@ export {
   postUserSession,
   notFound,
   getOngoingQuests,
+  getActiveOngoingQuests,
+  getCompleteOngoingQuests,
+  getTopCompleteOngoingQuests,
   postOngoingQuest,
   deleteOngoingQuest,
   patchOngoingQuest

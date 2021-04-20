@@ -12,8 +12,6 @@ if (!connectionString.endsWith(SSL_SUFFIX)) {
   connectionString += SSL_SUFFIX;
 }
 
-console.log(connectionString);
-
 const options = {
   client: "postgresql",
   connection: {
