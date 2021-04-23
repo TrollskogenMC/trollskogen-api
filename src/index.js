@@ -39,11 +39,7 @@ if (!process.env.API_KEY) {
 }
 
 const cors = corsMiddleware({
-  origins: [
-    "https://*.netlify.com",
-    "https://trollskogen.nu",
-    "https://localhost*"
-  ],
+  origins: ["https://*.netlify.com", "https://trollskogen.nu"],
   preflightMaxAge: 5
 });
 

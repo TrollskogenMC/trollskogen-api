@@ -35,9 +35,6 @@ Exposed routes:
 - GET /announcements/active - List all active ongoingquests
 - GET /announcements/complete - List all completed ongoingquests
 - GET /announcements/top - List a top list of players with most completed quests
-- POST /ongoingquest - Add a new ongoingquest
-- DELETE /ongoingquest/:id - Remove an ongoingquest
-- PATCH /ongoingquest/:id - Edit an ongoingquest
 
 ---
 

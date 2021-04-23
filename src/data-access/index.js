@@ -5,7 +5,7 @@ import makeServerDb from "./database.js";
 // https://github.com/knex/knex/issues/927#issuecomment-130485134
 pg.types.setTypeParser(1700, Number);
 
-const SSL_SUFFIX = "?ssl=false";
+const SSL_SUFFIX = "?ssl=true";
 
 let connectionString = process.env.DATABASE_URL;
 if (!connectionString.endsWith(SSL_SUFFIX)) {
@@ -14,14 +14,7 @@ if (!connectionString.endsWith(SSL_SUFFIX)) {
 
 const options = {
   client: "postgresql",
-  connection: {
-    //connectionString,
-    port: "5432",
-    ssl: false,
-    database: "trollskogen",
-    user: "postgres",
-    password: "minekwaft"
-  },
+  connection: connectionString,
   migrations: {
     tableName: "knex_migrations"
   }
