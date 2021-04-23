@@ -23,7 +23,14 @@ import {
   notFound,
   postChat,
   getChat,
-  postUserSession
+  postUserSession,
+  getOngoingQuests,
+  getActiveOngoingQuests,
+  getCompleteOngoingQuests,
+  getTopCompleteOngoingQuests,
+  postOngoingQuest,
+  patchOngoingQuest,
+  deleteOngoingQuest
 } from "./controllers/index.js";
 import { makeCallback, makeErrorCallback } from "./expressCallback.js";
 
@@ -64,6 +71,13 @@ app.patch("/announcement/:id(^[0-9]+$)", makeCallback(patchAnnouncement));
 app.get("/chat", makeCallback(getChat));
 app.post("/chat", makeCallback(postChat));
 app.post("/user-session", makeCallback(postUserSession));
+app.get("/ongoingquests", makeCallback(getOngoingQuests));
+app.get("/ongoingquests/active", makeCallback(getActiveOngoingQuests));
+app.get("/ongoingquests/complete", makeCallback(getCompleteOngoingQuests));
+app.get("/ongoingquests/top", makeCallback(getTopCompleteOngoingQuests));
+app.post("/ongoingquests", makeCallback(postOngoingQuest));
+app.patch("/ongoingquests/:id(^[0-9]+$)", makeCallback(patchOngoingQuest));
+app.del("/ongoingquests/:id(^[0-9]+$)", makeCallback(deleteOngoingQuest));
 
 app.on("NotFound", makeErrorCallback(notFound));
 

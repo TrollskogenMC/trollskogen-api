@@ -19,7 +19,14 @@ import {
   editAnnouncement,
   listChat,
   addChat,
-  addUserSession
+  addUserSession,
+  listOngoingQuests,
+  listCompleteOngoingQuests,
+  listActiveOngoingQuests,
+  listTopleteCompleteOngoingQuests,
+  addOngoingQuest,
+  editOngoingQuest,
+  removeOngoingQuest
 } from "../use-cases/index.js";
 import makeGetBans from "./getBans.js";
 import makeGetActiveBans from "./getActiveBans.js";
@@ -44,6 +51,13 @@ import makeNotFound from "./notFound.js";
 import makeGetChat from "./getChat.js";
 import makePostChat from "./postChat.js";
 import makePostUserSession from "./postUserSession.js";
+import makePostOngoingQuest from "./postOngoingQuest.js";
+import makeGetOngoingQuests from "./getOngoingQuests.js";
+import makeGetCompleteOngoingQuests from "./getCompleteOngoingQuests.js";
+import makeActiveOngoingQuests from "./getActiveOngoingQuests.js";
+import makeDeleteOngoingQuest from "./deleteOngoingQuest.js";
+import makePatchOngoingQuest from "./patchOngoingQuest.js";
+import makeGetTopCompleteOngoingQuests from "./getTopCompleteOngoingquests.js";
 
 const getBans = makeGetBans({ listBans });
 const getUsers = makeGetUsers({ listUsers });
@@ -68,6 +82,19 @@ const notFound = makeNotFound({});
 const getChat = makeGetChat({ listChat });
 const postChat = makePostChat({ addChat });
 const postUserSession = makePostUserSession({ addUserSession });
+const getOngoingQuests = makeGetOngoingQuests({ listOngoingQuests });
+const getActiveOngoingQuests = makeActiveOngoingQuests({
+  listActiveOngoingQuests
+});
+const getCompleteOngoingQuests = makeGetCompleteOngoingQuests({
+  listCompleteOngoingQuests
+});
+const getTopCompleteOngoingQuests = makeGetTopCompleteOngoingQuests({
+  listTopleteCompleteOngoingQuests
+});
+const postOngoingQuest = makePostOngoingQuest({ addOngoingQuest });
+const deleteOngoingQuest = makeDeleteOngoingQuest({ removeOngoingQuest });
+const patchOngoingQuest = makePatchOngoingQuest({ editOngoingQuest });
 
 export {
   deleteAnnouncement,
@@ -92,5 +119,12 @@ export {
   patchBan,
   postChat,
   postUserSession,
-  notFound
+  notFound,
+  getOngoingQuests,
+  getActiveOngoingQuests,
+  getCompleteOngoingQuests,
+  getTopCompleteOngoingQuests,
+  postOngoingQuest,
+  deleteOngoingQuest,
+  patchOngoingQuest
 };

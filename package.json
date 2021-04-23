@@ -26,7 +26,7 @@
   "dependencies": {
     "dotenv": "^8.2.0",
     "js-yaml": "^3.13.1",
-    "knex": "^0.21.1",
+    "knex": "^0.21.17",
     "pg": "^8.2.1",
     "restify": "^8.5.1",
     "restify-cors-middleware": "^1.1.1",

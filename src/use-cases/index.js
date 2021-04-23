@@ -20,6 +20,14 @@ import makeEditAnnouncement from "./editAnnouncement.js";
 import makeListChat from "./listChat.js";
 import makeAddChat from "./addChat.js";
 import makeUserSession from "./addUserSession.js";
+import makeListOngoingQuests from "./listOngoingQuests.js";
+import makeRetrieveOngoingQuest from "./retrieveOngoingquest.js";
+import makeAddOngoingQuest from "./addOngoingquest.js";
+import makeRemoveOngoingQuest from "./removeOngoinquest.js";
+import makeEditOngoingQuest from "./editOngoingquest.js";
+import makeListActiveOngoingQuests from "./listActiveOngoingquests.js";
+import makeListCompleteOngoingQuests from "./listCompleteOngoingquests.js";
+import makeListTopleteCompleteOngoingQuests from "./listTopCompletedOngoingQuests.js";
 
 const listBans = makeListBans({ db });
 const listUsers = makeListUsers({ db });
@@ -42,7 +50,14 @@ const editAnnouncement = makeEditAnnouncement({ db });
 const listChat = makeListChat({ db });
 const addChat = makeAddChat({ db });
 const addUserSession = makeUserSession({ db });
-
+const listOngoingQuests = makeListOngoingQuests({ db });
+const retrieveOngoingquest = makeRetrieveOngoingQuest({ db });
+const addOngoingQuest = makeAddOngoingQuest({ db });
+const removeOngoingQuest = makeRemoveOngoingQuest({ db });
+const editOngoingQuest = makeEditOngoingQuest({ db });
+const listActiveOngoingQuests = makeListActiveOngoingQuests({ db });
+const listCompleteOngoingQuests = makeListCompleteOngoingQuests({ db });
+const listTopleteCompleteOngoingQuests = makeListTopleteCompleteOngoingQuests({db});
 export {
   addAnnouncement,
   addBan,
@@ -64,5 +79,13 @@ export {
   editAnnouncement,
   addChat,
   listAnnouncements,
-  addUserSession
+  addUserSession,
+  listOngoingQuests,
+  retrieveOngoingquest,
+  addOngoingQuest,
+  removeOngoingQuest,
+  editOngoingQuest,
+  listActiveOngoingQuests,
+  listCompleteOngoingQuests,
+  listTopleteCompleteOngoingQuests
 };
