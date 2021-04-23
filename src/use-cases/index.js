@@ -20,7 +20,7 @@ import makeEditAnnouncement from "./editAnnouncement.js";
 import makeListChat from "./listChat.js";
 import makeAddChat from "./addChat.js";
 import makeUserSession from "./addUserSession.js";
-import makeListOngoingQuests from "./listOngoingQuests.js";
+import makeListOngoingQuests from "./listOngoingquests.js";
 import makeRetrieveOngoingQuest from "./retrieveOngoingquest.js";
 import makeAddOngoingQuest from "./addOngoingquest.js";
 import makeRemoveOngoingQuest from "./removeOngoinquest.js";
@@ -57,7 +57,9 @@ const removeOngoingQuest = makeRemoveOngoingQuest({ db });
 const editOngoingQuest = makeEditOngoingQuest({ db });
 const listActiveOngoingQuests = makeListActiveOngoingQuests({ db });
 const listCompleteOngoingQuests = makeListCompleteOngoingQuests({ db });
-const listTopleteCompleteOngoingQuests = makeListTopleteCompleteOngoingQuests({db});
+const listTopleteCompleteOngoingQuests = makeListTopleteCompleteOngoingQuests({
+  db
+});
 export {
   addAnnouncement,
   addBan,
